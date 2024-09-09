@@ -136,21 +136,21 @@ The uniform prior for the $N_p$ parameters is then
 $$
 \pdf{\pars}{I} = \frac{1}{(\Delta\para)^{N_p}} \left\{ 
 \begin{array}{ll}
-1 & \text{if all } \para_i \in [-\Delta\par/2, +\Delta\par/2] \\
+1 & \text{if all } \para_i \in [-\Delta\para/2, +\Delta\para/2] \\
 0 & \text{else},
 \end{array}
 \right.
 $$ (eq:BayesianLinearRegression:uniform_iid_prior)
 
-with $\Delta\par$ the width of the prior range in all parameter directions. 
+with $\Delta\para$ the width of the prior range in all parameter directions. 
 
 The Gaussian prior that we will also be exploring is
 
 $$
-\pdf{\pars}{I} = \left(\frac{1}{2\pi\sigma_\par^2}\right)^{N_p/2} \exp\left[ -\frac{1}{2}\frac{\pars^T\pars}{\sigma_\par^2} \right],
+\pdf{\pars}{I} = \left(\frac{1}{2\pi\sigma_\para^2}\right)^{N_p/2} \exp\left[ -\frac{1}{2}\frac{\pars^T\pars}{\sigma_\para^2} \right],
 $$ (eq:BayesianLinearRegression:gaussian_iid_prior)
 
-with $\sigma_\par$ the standard deviation of the prior for all parameters.
+with $\sigma_\para$ the standard deviation of the prior for all parameters.
 
 ## The posterior
 
@@ -178,7 +178,7 @@ Prove Eq. {eq}`eq:BayesianLinearRegression:likelihood_pars`.
 
 ### Posterior with a uniform prior
 
-Let us first consider a uniform prior as expressed in Eq. {eq}`eq:BayesianLinearRegression:uniform_iid_prior`. The prior can be considered very broad if its boundaries $\pm \Delta\par/2$ are very far from the mode of the likelihood {eq}`eq:BayesianLinearRegression:likelihood_pars`, where distance is measured in terms of standard deviations. This implies that the posterior
+Let us first consider a uniform prior as expressed in Eq. {eq}`eq:BayesianLinearRegression:uniform_iid_prior`. The prior can be considered very broad if its boundaries $\pm \Delta\para/2$ are very far from the mode of the likelihood {eq}`eq:BayesianLinearRegression:likelihood_pars`, where distance is measured in terms of standard deviations. This implies that the posterior
 
 \begin{equation}
 \pdf{\pars}{\data,\sigmares^2,I} \propto \pdf{\data}{\pars,\sigmares^2,I} \pdf{\pars}{I},
@@ -190,7 +190,7 @@ $$
 \pdf{\pars}{\data,\sigmares^2,I} \propto \exp\left[ -\frac{1}{2} (\pars-\pars^*)^T \covpars^{-1} (\pars-\pars^*) \right],
 $$ (eq:BayesianLinearRegression:posterior_with_iid_uniform_prior)
 
-if all $\para_i \in [-\Delta\par/2, +\Delta\par/2]$ while it is zero elsewhere. The mode of this distribution is obviously the mean vector $\pars^*$. We can therefore say that we have recovered the ordinary least-squares result with the interpretation that this solution is the maximum of the posterior PDF (sometimes known as the maximum a posteriori, or MAP).
+if all $\para_i \in [-\Delta\para/2, +\Delta\para/2]$ while it is zero elsewhere. The mode of this distribution is obviously the mean vector $\pars^*$. We can therefore say that we have recovered the ordinary least-squares result with the interpretation that this solution is the maximum of the posterior PDF (sometimes known as the maximum a posteriori, or MAP).
 
 ```{admonition} Discuss
 In light of this result, what assumption(s) are implicit in linear regression while they are made explicit in Bayesian linear regression?
@@ -202,18 +202,18 @@ In light of this result, what assumption(s) are implicit in linear regression wh
 Assigning instead a Gaussian prior as expressed in Eq. {eq}`eq:BayesianLinearRegression:gaussian_iid_prior` corresponds to a situation in which we have prior information on the expected magnitude of model parameters. The posterior is then proportional to the product of two multivariate normal distributions
 
 $$
-\pdf{\pars}{\data,\sigmares^2,I} &\propto \exp\left[ -\frac{1}{2} (\pars-\pars^*)^T \covpars^{-1} (\pars-\pars^*) \right] \exp\left[ -\frac{1}{2}\frac{\pars^T\pars}{\sigma_\par^2} \right] \\
+\pdf{\pars}{\data,\sigmares^2,I} &\propto \exp\left[ -\frac{1}{2} (\pars-\pars^*)^T \covpars^{-1} (\pars-\pars^*) \right] \exp\left[ -\frac{1}{2}\frac{\pars^T\pars}{\sigma_\para^2} \right] \\
 &= \exp\left[ -\frac{1}{2} (\pars-\tilde\pars)^T \tildecovpars^{-1} (\pars-\tilde\pars) \right],
 $$ (eq:BayesianLinearRegression:posterior_with_iid_gaussian_prior)
 
 i.e., another Gaussian with covariance matrix and mean vector
 
 $$
-\tildecovpars^{-1} &= \covpars^{-1} + \sigma_\par^{-2} \boldsymbol{1} \\
+\tildecovpars^{-1} &= \covpars^{-1} + \sigma_\para^{-2} \boldsymbol{1} \\
 \tilde\pars &= \tildecovpars \covpars^{-1} \pars^*
 $$ (eq:BayesianLinearRegression:posterior_pars_with_iid_gaussian_prior)
 
-where $\boldsymbol{1}$ is the $N_p \times N_p$ unit matrix. In effect, the prior distribution becomes the posterior one via an inference process that involves learning from data. In this particular case, the inference returns a Gaussian PDF with updated parameters where the mode changes from $\boldsymbol{0}$ to $\tilde\pars$ and the variance from $\sigma_\par^2$ in all directions to the covariance matrix $\tildecovpars$.
+where $\boldsymbol{1}$ is the $N_p \times N_p$ unit matrix. In effect, the prior distribution becomes the posterior one via an inference process that involves learning from data. In this particular case, the inference returns a Gaussian PDF with updated parameters where the mode changes from $\boldsymbol{0}$ to $\tilde\pars$ and the variance from $\sigma_\para^2$ in all directions to the covariance matrix $\tildecovpars$.
 
 ```{admonition} Discuss
 What happens if the data is of high quality (sharply peaked around $\pars^*$), and what happens if it is of poor quality (providing a very broad likelihood distribution)?
@@ -370,7 +370,7 @@ Explore the sensitivity to changes in the residual errors $\sigmares$. Try to in
 ```{exercise} Warm-up Bayesian linear regression (prior sensitivity)
 :label: exercise:BayesianLinearRegression:warmup_priors
 
-Explore the sensitivity to changes in the Gaussian prior width $\sigma_\par$. Try to increase and reduce the width.
+Explore the sensitivity to changes in the Gaussian prior width $\sigma_\para$. Try to increase and reduce the width.
 ```
 
 ```{exercise} "In practice" Bayesian linear regression 
@@ -395,7 +395,7 @@ In all cases you should compare the Bayesian inference with the results from Ord
 Hints:
 
 1. Identify the solution $\pars^*$ as the maximum of the likelihood by introducing $L(\pars)$ as the negative log-likelihood.
-2. Taylor expand $L(\pars)$ around $\pars^*$. For this you need the Hessian $\boldsymbol{H}$ with elements $H_{ij} = \left. \frac{\partial^2 L}{\partial\para_i\partial\para_j} \right|_{\pars = \pars^*}$.
+2. Taylor expand $L(\pars)$ around $\pars^*$. For this you need the Hessian $\boldsymbol{H}$ with elements $H_{ij} = \left. \frac{\paratial^2 L}{\paratial\para_i\paratial\para_j} \right|_{\pars = \pars^*}$.
 3. Compare with the Taylor expansion of a normal distribution $\mathcal{N}\left( \pars^*, \covpars \right)$.
 ```
 
