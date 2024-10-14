@@ -112,6 +112,8 @@ For the remainder of this chapter we will consider gradient descent methods for 
 
 ## Batch, stochastic and mini-batch gradient descent
 
+{{ sub_extra_tif385_admonition }}
+
 The use of the full data set in the cost function for every parameter update would correspond to *batch gradient descent* (BGD). The gradient of the cost function then has the following generic form
 
 \begin{equation}
@@ -166,6 +168,8 @@ for i in range(N_epochs):
 Be aware that the terms SGD or BGD can both be used to denote mini-batch gradient descent. 
 
 ## Adaptive gradient descent algorithms
+
+{{ sub_extra_tif385_admonition }}
 
 As outlined above, there are several convergence challenges for the standard gradient-descent methods. These are in general connected with the difficulty of navigating complicated cost function surfaces using only pointwise information on the gradient. The use of the history of past updates can help to adapt the learning schedule and has been shown to significantly increase the efficiency of gradient descent. Somewhat simplified, the adaptive versions improves the parameter update by adding a fraction of the past update vector to the current one.
 
