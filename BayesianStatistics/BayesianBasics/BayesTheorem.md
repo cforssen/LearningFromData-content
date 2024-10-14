@@ -115,6 +115,9 @@ Marginalization is a very powerful device in data analysis because it enables us
 
 
 ## Example: Is this a fair coin?
+
+{{ sub_extra_tif385_admonition }}
+
 Let us begin with the analysis of data from a simple coin-tossing experiment. 
 Given that we had observed 6 heads in 8 flips, would you think it was a fair coin? By fair, we mean that we would be prepared to lay an even 1 : 1 bet on the outcome of a flip being a head or a tail. If we decide that the coin was fair, the question which follows naturally is how sure are we that this was so; if it was not fair, how unfair do we think it was? Furthermore, if we were to continue collecting data for this particular coin, observing the outcomes of additional flips, how would we update our belief on the fairness of the coin?
 
