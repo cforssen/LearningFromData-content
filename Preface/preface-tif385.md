@@ -35,16 +35,16 @@ A clickable high-level table of contents (TOC) is available in the panel at the 
 <!-- ======= Acknowledgements ======= -->
 ## Acknowledgements
 
-These notes have evolved over several years with the experience from teaching courses at various levels that included different subsets of the material. The absolute origin was an intensive three-week summer school course for young researchers taught at the [University of York](https://www.york.ac.uk/) in 2019 by Christian Forssén, Dick Furnstahl, and Daniel Phillips as part of the [TALENT](https://fribtheoryalliance.org/TALENT/) initiative. Both the original notes and subsequent revisions have been informed by interactions with many colleagues. I am particularly grateful to:
+These notes have evolved over several years with the experience from teaching courses at various levels that included different subsets of the material. The origin was an intensive three-week summer school course for young researchers taught at the [University of York](https://www.york.ac.uk/) in 2019 by Christian Forssén, Dick Furnstahl, and Daniel Phillips as part of the [TALENT](https://fribtheoryalliance.org/TALENT/) initiative. New material has subsequently been added for course developments at Chalmers and for lecture series at other universities. Significant contributions from Andreas Ekström are specifically acknowledged. In general, both the original notes and subsequent revisions have been informed by interactions with many colleagues. I am particularly grateful to:
 
-* Prof. Andreas Ekström, Chalmers University of Technology
-* Prof. Richard Furnstahl, Ohio State University
-* Prof. Morten Hjorth-Jensen, Oslo University and Michigan State University
-* Prof. Daniel Phillips, Ohio University
-* Prof. Ian Vernon, Durham University
-* Dr. Sarah Wesolowski, University of Pennsylvania
+* Andreas Ekström, Chalmers University of Technology
+* Richard Furnstahl, Ohio State University
+* Morten Hjorth-Jensen, Oslo University and Michigan State University
+* Daniel Phillips, Ohio University
+* Ian Vernon, Durham University
+* Sarah Wesolowski, University of Pennsylvania
 
-Many of the advanced Bayesian methods that might be included in these notes have been published in scientific papers co-authored with different collaborators. In particular, several postdocs, PhD students and master students have had leading roles in the development and application of the methods to address various scientific questions. In alphabetical order I would like to highlight the contributions of: Boris Carlsson, Tor Djärv, Weiguang Jiang, Eleanor May, Isak Svensson, and Oliver Thim.
+Many of the advanced Bayesian methods that might be included in these notes have been used in scientific studies with different collaborators. In particular, several postdocs, PhD students and master students have had leading roles in the development and application of these methods to address various scientific questions. In alphabetical order I would like to highlight the contributions of: Boris Carlsson, Tor Djärv, Weiguang Jiang, Eleanor May, Isak Svensson, and Oliver Thim.
 
 The full list of people that have contributed with ideas, discussions, or by generously sharing their knowledge is very long. Rather than inadvertently omitting someone, I simply say thank you to all. More generally, I am truly thankful for being part of an academic environment in which ideas and efforts are shared rather than kept isolated.
 

@@ -45,7 +45,7 @@ These lecture notes have been authored by [Christian Forssén](https://www.chalm
 
 # Acknowledgements
 
-These notes have evolved over several years with the experience from teaching different courses that included different subsets of the material. The absolute origin was an intensive three-week summer school course taught at the [University of York](https://www.york.ac.uk/) in 2019 by Christian Forssén, Dick Furnstahl, and Daniel Phillips as part of the [TALENT](https://fribtheoryalliance.org/TALENT/) initiative. New material has subsequently been added for course developments at Chalmers and for lecture series at other universities. Significant contributions from Andreas Ekström are specifically acknowledged. In general, both the original notes and subsequent revisions have been informed by interactions with many colleagues. I am particularly grateful to:
+These notes have evolved over several years with the experience from teaching different courses that included different subsets of the material. The origin was an intensive three-week summer school course taught at the [University of York](https://www.york.ac.uk/) in 2019 by Christian Forssén, Dick Furnstahl, and Daniel Phillips as part of the [TALENT](https://fribtheoryalliance.org/TALENT/) initiative. New material has subsequently been added for course developments at Chalmers and for lecture series at other universities. Significant contributions from Andreas Ekström are specifically acknowledged. In general, both the original notes and subsequent revisions have been informed by interactions with many colleagues. I am particularly grateful to:
 
 * Andreas Ekström, Chalmers University of Technology
 * Richard Furnstahl, Ohio State University
@@ -54,7 +54,7 @@ These notes have evolved over several years with the experience from teaching di
 * Ian Vernon, Durham University
 * Sarah Wesolowski, University of Pennsylvania
 
-Many of the advanced Bayesian methods that are presented in these notes have been published in scientific papers co-authored with different collaborators. In particular, several postdocs, PhD students and master students have had leading roles in the development and application of the methods to address various scientific questions. In alphabetical order I would like to highlight the contributions of: Boris Carlsson, Tor Djärv, Weiguang Jiang, Eleanor May, Isak Svensson, and Oliver Thim.
+Many of the advanced Bayesian methods that might be included in these notes have been used in scientific studies with different collaborators. In particular, several postdocs, PhD students and master students have had leading roles in the development and application of these methods to address various scientific questions. In alphabetical order I would like to highlight the contributions of: Boris Carlsson, Tor Djärv, Weiguang Jiang, Eleanor May, Isak Svensson, and Oliver Thim.
 
 The full list of people that have contributed with ideas, discussions, or by generously sharing their knowledge is very long. Rather than inadvertently omitting someone, I simply say thank you to all. More generally, I am truly thankful for being part of an academic environment in which ideas and efforts are shared rather than kept isolated.
 
