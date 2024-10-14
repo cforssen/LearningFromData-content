@@ -278,7 +278,7 @@ These walks can be made more general by allowing the steps $X_n$ to have some co
 
 ## Special case: Gaussian process
 
-{{ sub_extra_admonition }}
+{{ sub_extra_tif385_admonition }}
 
 The joint density function for a multivariate normal distribution was presented in Eq. {eq}`eq:Statistics:multivariate-normal-PDF` for $\boldsymbol{x} = (x_1, x_2, \ldots, x_k)$ corresponding to random variables $X_1, X_2, \ldots X_k$. This normal distribution is completely determined by its mean vector, $\boldsymbol{\mu}$, and covariance matrix, $\boldsymbol{\Sigma}$, where elements $\mu_i = \expect{X_i}$ and $\Sigma_{ij} = \cov{X_i}{X_j}$.
 
@@ -302,12 +302,6 @@ A Gaussian process is completely determined by its *mean function* $\mu(X(t))$ a
 ```  
 
 A Gaussian process is stationary if the mean function $\mu(X(t))$ is constant for all $t$ and if the covariance function fulfils $C(X(s), X(t)) = C(X(s+h), X(t+h))$ with $h \geq 0$. Note that stationarity is not a requirement for a Gaussian process.
-
-## Special case: The Poisson process
-
-{{ sub_extra_admonition }}
-
-Material will be added.
 
 ## Solutions
 

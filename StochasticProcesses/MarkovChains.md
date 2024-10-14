@@ -189,7 +189,7 @@ fig_corner = pp.corner(example.sequence[:4,:].T,labels=[fr'$X_{{{i}}}$' for i in
 glue("MarkovProcessExample_corner_fig", fig_corner, display=False)
 ```
 
-## Limiting distributions
+## Stationary and limiting distributions
 
 
 We will now explore the long-time evolution of a Markov chain. We will, for simplicity, consider a countable sample space although our final application will be to continuous probability distributions. 
