@@ -367,8 +367,8 @@ Bayes classifiers, and artificial neural networks.  Specifically, the predicted 
 vector $\boldsymbol{x}^{(i)}$ and a weighting vector $\boldsymbol{w}$ is (with one independent variable):
 
 \begin{equation}
-
 \prob (t^{(i)}=k\vert \boldsymbol{x}^{(i)},  \boldsymbol{w} ) = \frac{\exp{(w_{k,0}+w_{k,1}x_1^{(i)})}} {\sum_{l=1}^{K}\exp{(w_{l,0}+w_{l,1}x_1^{(i)})}}.
+\end{equation}
 
 which means that the discrete set of probabilities is properly normalized. 
 
