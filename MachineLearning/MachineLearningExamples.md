@@ -99,17 +99,17 @@ where $\bar{y} = \frac{1}{N} \sum_{i=1}^N \MLoutput_{i}$ is the mean of the mode
 ````{prf:example} Binary classification
 :label: example:MLexamples:binary-classification
 
-Figure {numref}`fig:MLexamples:binary_classification_data` shows a scatterplot of training data that is a function of two predictor variables $\inputs_i = (x_1, x_2)_i$. The output $y$ is a class that can be either Blue or Red. 
+Figure {numref}`fig-example-MLexamples-binary_classification_data` shows a scatterplot of training data that is a function of two predictor variables $\inputs_i = (x_1, x_2)_i$. The output $y$ is a class that can be either Blue or Red. 
 
 The procedure and code that generate this data is included in the hidden code cell below. However, here we assume that we don't know the underlying data generating process. Our aim is to construct machine learning algorithms that can be trained on the collected data and make predictions for future data. The task can then be expressed as: Develop a computer program that can learn from labeled data $\trainingdata = \{ \inputs_i, \output_i\}_{i=1}^N$ and make a prediction of the class $\testoutput$ that a new input $\testinputs$ belongs to.
 
+````
+
 ```{glue:figure} binary_classification_data_fig
-:name: "fig:MLexamples:binary_classification_data"
+:name: fig-example-MLexamples-binary_classification_data
 
 Labeled training data for a binary classification problem.
 ```
-
-````
 
 ```{code-cell} python3
 :tags: [hide-cell]
@@ -160,7 +160,7 @@ train_data = generate_binaryclass_data(num_data_per_class)
 np.random.shuffle(train_data)
 
 
-fig_train_data,ax = plt.subplots(1,1)
+fig_train_data,ax = plt.subplots(1,1, figsize=(4,4))
 for iclass, color in enumerate(classes):
     x_data = train_data[train_data[:,2]==iclass,:2]
     ax.scatter(x_data[:,0],x_data[:,1],color=color)
