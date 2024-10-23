@@ -187,10 +187,10 @@ We have seen that the ability to draw samples from a probability distribution is
 can be tuned to a a set of samples $\{ \para_i \}_{i=1}^N$ from the standard Gaussian distribution $\mathcal{N}(0,1)$ via the transformation
 
 \begin{equation}
-\para_i = F^{-1}_\mathcal{N}(u_i),
+\para_i = F^{-1}_{\mathcal{N}}(u_i),
 \end{equation}
 
-where $F^{-1}_\mathcal{N}$ is the *inverse* distribution function of the standard normal distribution. That is, we interpret $u_i$ as a probability sample and use the above transformation to find the solution to $u_i = F(\para_i)$.
+where $F^{-1}_{\mathcal{N}}$ is the *inverse* distribution function of the standard normal distribution. That is, we interpret $u_i$ as a probability sample and use the above transformation to find the solution to $u_i = F(\para_i)$.
 
 This works well for many standard distributions. However, for the generation of random samples from nonstandard, arbitrary distributions (such as the ones that we might encounter in a realistic Bayesian analysis), no algorithms are available. This is where custom-built Markov chains enter.
 
