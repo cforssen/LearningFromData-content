@@ -123,7 +123,7 @@ The joint distribution function of a vector $\boldsymbol{X}$ of random variables
 P(\boldsymbol{x}) = \prob (\boldsymbol{X} \leq \boldsymbol{x}), \qquad x \in \mathbb{R}^n. 
 \end{equation}
 
-We can write $P_\boldsymbol{X}$ where it is necessary to emphasize the role of $\boldsymbol{X}$.
+We can write $P_{\boldsymbol{X}}$ where it is necessary to emphasize the role of $\boldsymbol{X}$.
 ```
 
 For random variables that are continuous it will be very useful to work with probability densities. Let us define those, starting however with the corresponding quantity (probability mass) for discrete random variables.
