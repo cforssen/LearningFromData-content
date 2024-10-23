@@ -10,17 +10,6 @@ kernelspec:
   name: python3
 ---
 
-```{math}
-\newcommand{\residuals}{\boldsymbol{\epsilon}}
-\newcommand{\zeros}{\boldsymbol{0}}
-\newcommand{\covres}{\boldsymbol{\Sigma_\epsilon}}
-\newcommand{\covpars}{\boldsymbol{\Sigma_\pars}}
-\newcommand{\tildecovpars}{\boldsymbol{\widetilde{\Sigma}_\pars}}
-\newcommand{\sigmas}{\boldsymbol{\sigma}}
-\newcommand{\sigmai}{\sigma_i}
-\newcommand{\sigmares}{\sigma_\epsilon}
-```
-
 (sec:BayesianLinearRegression)=
 # Bayesian Linear Regression
 
@@ -202,18 +191,18 @@ In light of this result, what assumption(s) are implicit in linear regression wh
 Assigning instead a Gaussian prior as expressed in Eq. {eq}`eq:BayesianLinearRegression:gaussian_iid_prior` corresponds to a situation in which we have prior information on the expected magnitude of model parameters. The posterior is then proportional to the product of two multivariate normal distributions
 
 $$
-\pdf{\pars}{\data,\sigmares^2,I} &\propto \exp\left[ -\frac{1}{2} (\pars-\pars^*)^T \covpars^{-1} (\pars-\pars^*) \right] \exp\left[ -\frac{1}{2}\frac{\pars^T\pars}{\sigma_\para^2} \right] \\
-&= \exp\left[ -\frac{1}{2} (\pars-\tilde\pars)^T \tildecovpars^{-1} (\pars-\tilde\pars) \right],
+\pdf{\pars}{\data,\sigmares^2,I} &\propto \exp\left[ -\frac{1}{2} (\pars-\pars^*)^T \covpars^{-1} (\pars-\pars^*) \right] \exp\left[ -\frac{1}{2}\frac{\pars^T\pars}{\sigma_{\para}^2} \right] \\
+&= \exp\left[ -\frac{1}{2} (\pars-\tilde{\pars})^T \tildecovpars^{-1} (\pars-\tilde{\pars}) \right],
 $$ (eq:BayesianLinearRegression:posterior_with_iid_gaussian_prior)
 
 i.e., another Gaussian with covariance matrix and mean vector
 
 $$
-\tildecovpars^{-1} &= \covpars^{-1} + \sigma_\para^{-2} \boldsymbol{1} \\
-\tilde\pars &= \tildecovpars \covpars^{-1} \pars^*
+\tildecovpars^{-1} &= \covpars^{-1} + \sigma_{\para}^{-2} \boldsymbol{1} \\
+\tilde{\pars} &= \tildecovpars \covpars^{-1} \pars^*
 $$ (eq:BayesianLinearRegression:posterior_pars_with_iid_gaussian_prior)
 
-where $\boldsymbol{1}$ is the $N_p \times N_p$ unit matrix. In effect, the prior distribution becomes the posterior one via an inference process that involves learning from data. In this particular case, the inference returns a Gaussian PDF with updated parameters where the mode changes from $\boldsymbol{0}$ to $\tilde\pars$ and the variance from $\sigma_\para^2$ in all directions to the covariance matrix $\tildecovpars$.
+where $\boldsymbol{1}$ is the $N_p \times N_p$ unit matrix. In effect, the prior distribution becomes the posterior one via an inference process that involves learning from data. In this particular case, the inference returns a Gaussian PDF with updated parameters where the mode changes from $\boldsymbol{0}$ to $\tilde{\pars}$ and the variance from $\sigma_{\para}^2$ in all directions to the covariance matrix $\tildecovpars$.
 
 ```{admonition} Discuss
 What happens if the data is of high quality (sharply peaked around $\pars^*$), and what happens if it is of poor quality (providing a very broad likelihood distribution)?
@@ -308,7 +297,7 @@ It is straightforward to evaluate Eq. {eq}`eq:BayesianLinearRegression:posterior
 
 $$
 \tildecovpars^{-1} &=  4 \begin{pmatrix} 2.01 & -1.0 \\ -1.0 & 5.01 \end{pmatrix} \\
-\tilde\pars &= ( 0.992, 1.994)
+\tilde{\pars} &= ( 0.992, 1.994)
 $$ (eq_warmup_results)
 
 This should be compared with the parameter vector $(1,2)$ we recovered using ordinary linear regression. With Bayesian linear regression we start from an informative prior with both parameters centered on zero with a rather large variance.
@@ -395,7 +384,7 @@ In all cases you should compare the Bayesian inference with the results from Ord
 Hints:
 
 1. Identify the solution $\pars^*$ as the maximum of the likelihood by introducing $L(\pars)$ as the negative log-likelihood.
-2. Taylor expand $L(\pars)$ around $\pars^*$. For this you need the Hessian $\boldsymbol{H}$ with elements $H_{ij} = \left. \frac{\paratial^2 L}{\paratial\para_i\paratial\para_j} \right|_{\pars = \pars^*}$.
+2. Taylor expand $L(\pars)$ around $\pars^*$. For this you need the Hessian $\boldsymbol{H}$ with elements $H_{ij} = \left. \frac{\partial^2 L}{\partial\para_i\partial\para_j} \right|_{\pars = \pars^*}$.
 3. Compare with the Taylor expansion of a normal distribution $\mathcal{N}\left( \pars^*, \covpars \right)$.
 ```
 
