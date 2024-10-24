@@ -488,17 +488,18 @@ Some of these remarks are particular to DNNs, others are shared by all supervise
 
 ## Exercises
 
-```{exercise} Weights and signal propagation of a simple neural netwrok
+````{exercise} Weights and signal propagation of a simple neural netwrok
 :label: exercise:NeuralNet:simple-network
 
-`{figure} ./figs/fig-NeuralNet-simple.pdf`
+```{figure} ./figs/fig-NeuralNet-simple.png
+```
 
 Consider a neural network with two nodes in the input layer, one hidden layer with three nodes, and an output layer with one node (see figure). All active nodes (i.e., those that map input signals to an output via an activation function) employ the same activation function $f(z) = 1 / (1 + e^{-z})$ and include a bias weight when computing the activation $z$.
 
-- (a) How many free (trainable) parameters does this neural network have?
-- (b) Write an explicit expression for the output signal $y$ from the output node as a function of its weights $(w^2_{11}, w^2_{12},w^2_{13})$, bias weight $b^2_1$, and the signals $(y^1_1, y^1_2,y^1_3)$ coming from the nodes in the hidden layer.
--(c) Write a vector expression for the activations $(z^1_1, z^1_2, z^1_3)$ of the three nodes in the hidden layer given a vector of inputs $(x_1, x_2)$ and a matrix that contains the weights of the hidden layer and a vector that contains the bias weights. Be explicit how the weights are ordered in the matrix such that the activation vector can be obtained with matrix-vector operations.
-- (d) How can the above expression be generalized to handle a scenario when there are four instances of input data?
+- a) How many free (trainable) parameters does this neural network have?
+- b) Write an explicit expression for the output signal $y$ from the output node as a function of its weights $(w^2_{11}, w^2_{12},w^2_{13})$, bias weight $b^2_1$, and the signals $(y^1_1, y^1_2,y^1_3)$ coming from the nodes in the hidden layer.
+- c) Write a vector expression for the activations $(z^1_1, z^1_2, z^1_3)$ of the three nodes in the hidden layer given a vector of inputs $(x_1, x_2)$ and a matrix that contains the weights of the hidden layer and a vector that contains the bias weights. Be explicit how the weights are ordered in the matrix such that the activation vector can be obtained with matrix-vector operations.
+- d) How can the above expression be generalized to handle a scenario when there are four instances of input data?
 
 $$
 \boldsymbol{X} = \begin{pmatrix}
@@ -508,6 +509,16 @@ x^{(3)}_1 & x^{(3)}_2  \\
 x^{(4)}_1 & x^{(4)}_2  
 \end{pmatrix}
 $$
+````
+
+```{exercise} Weights and signal propagation of a wide neural netwrok
+:label: exercise:NeuralNet:wide-network
+
+Consider a neural network with three nodes in the input layer, one hidden layer with one hundred nodes, and an output layer with two nodes. All nodes in the hidden layer employ the same activation function $f(z) = 1 / (1 + e^{-z})$ and include a bias weight when computing the activation $z$. The nodes in the output layer are linear.
+
+- a) How many free (trainable) parameters does this neural network have?
+- b) Introduce relevant matrices and vectors to write down an expression for the output signal $\boldsymbol{y} = (y_1, y_2)$ given an input $\boldsymbol{x} = (x_1, x_2, x_3)$.
+- c) How would this expression have to be modified to handle a scenario when there are $N$ instances of input data, for which one would like to compute the corresponding network outputs?
 ```
 
 ## Solutions
@@ -516,12 +527,29 @@ $$
 :label: solution:NeuralNet:simple-network
 :class: dropdown
 
-- (a) Trainable parameters are in the active nodes which, in this case, are the nodes in the hidden layer and the output layer. There are three weights per node in the hidden layer (two linear ones multiplying the two input signals and one bias) and four weights in the output node (three linear weights and one bias). Therefore, in total, there are $3 \times 3 + 4 = 13$.
-- (b) $y = 1 / (1+e^{-z})$, where $z = w^2_{11} y^1_1 + w^2_{12} y^1_2 + w^2_{13} y^1_3 + b^2_1$.
-- (c) $\boldsymbol{z}^{1} = \boldsymbol{x} \cdot \boldsymbol{W}^{1} + \boldsymbol{b}^{1}$, where $\boldsymbol{z}^{1} = (z^1_1, z^1_2, z^1_3)$, $\boldsymbol{x} = (x_1, x_2)$, $\boldsymbol{b}^{1} = (b^1_1, b^1_2,b^1_3)$ are all row vectors and $\boldsymbol{W}^{1} = \begin{pmatrix}
+- a) Trainable parameters are in the active nodes which, in this case, are the nodes in the hidden layer and the output layer. There are three weights per node in the hidden layer (two linear ones multiplying the two input signals and one bias) and four weights in the output node (three linear weights and one bias). Therefore, in total, there are $3 \times 3 + 4 = 13$.
+- b) $y = 1 / (1+e^{-z})$, where $z = w^2_{11} y^1_1 + w^2_{12} y^1_2 + w^2_{13} y^1_3 + b^2_1$.
+- c) $\boldsymbol{z}^{1} = \boldsymbol{x} \cdot \boldsymbol{W}^{1} + \boldsymbol{b}^{1}$, where $\boldsymbol{z}^{1} = (z^1_1, z^1_2, z^1_3)$, $\boldsymbol{x} = (x_1, x_2)$, $\boldsymbol{b}^{1} = (b^1_1, b^1_2,b^1_3)$ are all row vectors and $\boldsymbol{W}^{1} = \begin{pmatrix}
 w^{1}_{11} & w^{1}_{12} & w^{1}_{13} \\
 w^{1}_{21} & w^{1}_{22} & w^{1}_{23}
 \end{pmatrix}$ is a $2 \times 3$ matrix.
-- (d) It would look the same $\boldsymbol{Z}^{1} = \boldsymbol{X} \cdot \boldsymbol{W}^{1} + \boldsymbol{b}^{1}$ but $\boldsymbol{Z}^{1}$ would now be a $4 \times 3$ matrix with each row containing the hidden layer node activations for the corresponding instance of input data (row in $\boldsymbol{X}$). Applying the activation function $f(z)$ to each element of this matrix would give the corresponding output signals $\boldsymbol{Y}^{1}$ as another $4 \times 3$ matrix.
+- d) It would look the same $\boldsymbol{Z}^{1} = \boldsymbol{X} \cdot \boldsymbol{W}^{1} + \boldsymbol{b}^{1}$ but $\boldsymbol{Z}^{1}$ would now be a $4 \times 3$ matrix with each row containing the hidden layer node activations for the corresponding instance of input data (row in $\boldsymbol{X}$). Applying the activation function $f(z)$ to each element of this matrix would give the corresponding output signals $\boldsymbol{Y}^{1}$ as another $4 \times 3$ matrix.
+```
+
+```{solution} exercise:NeuralNet:wide-network
+:label: solution:NeuralNet:wide-network
+:class: dropdown
+
+- a) There are $100 \times (3+1) + 2 \times (100+1) = 602$ trainable parameters.
+- b) $\boldsymbol{y} = \boldsymbol{z} = \boldsymbol{y}^1 \boldsymbol{W}^2 + \boldsymbol{b}^2$, where the output layer parameters appear in the $\boldsymbol{W}^2$ matrix and the $\boldsymbol{b}^2$ vector.
+
+	Furthermore, $\boldsymbol{y}^1 = 1 / (1+e^{-\boldsymbol{z}^1})$ and $\boldsymbol{z}^{1} = \boldsymbol{x} \boldsymbol{W}^{1} + \boldsymbol{b}^{1}$.
+
+	The weight matrices and the bias vectors of layer $L$ have elements $w^L_{ij}$ and $b^L_j$, respectively, and will have the sizes: $\text{dim}(\boldsymbol{W}^{1}) = 3 \times 100$, $\text{dim}(\boldsymbol{b}^{1}) = 1 \times 100$, $\text{dim}(\boldsymbol{W}^{2}) = 100 \times 2$, $\text{dim}(\boldsymbol{b}^{2}) = 1 \times 2$.
+
+- c) In this case, the input, $\boldsymbol{X}$, becomes an $N \times 3$ matrix.
+The linear algebra expressions would look the same with the data instances representing one more dimension. That is $\boldsymbol{Y} = \boldsymbol{Y}^1 \boldsymbol{W}^2 + \boldsymbol{b}^2$, with $\text{dim}(\boldsymbol{Y}) = N \times 2$,
+and $\boldsymbol{Y}^1 = f(\boldsymbol{Z}^1)$. Here, 
+$\boldsymbol{Z}^{1} = \boldsymbol{X} \boldsymbol{W}^{1} + \boldsymbol{b}^{1}$ is now an $N \times 3$ matrix with each row containing the hidden layer node activations for the corresponding instance of input data (row in $\boldsymbol{X}$). Furthermore, signals $\boldsymbol{Y}^1$ and activations $\boldsymbol{Z}^2$ are both matrices with $N$ rows. Note, however, that the weight and bias matrices are the same.
 ```
 
