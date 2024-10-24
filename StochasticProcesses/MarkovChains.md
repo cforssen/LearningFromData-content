@@ -404,7 +404,7 @@ Four chains produced with the reversible Markov chain.
 :scale: 75
 :name: "fig-example-ReversibleMarkovProcessExample-cprob"
 
-Conditional probabilities for the reversible Markov chain. See the caption of {numref}`fig-X2givenX0` for explanations how to interpret these plots.
+Conditional probabilities for the reversible Markov chain. See the caption of {numref}`fig:X2givenX0` for explanations how to interpret these plots.
 ```
 
 ```{code-cell} python3
