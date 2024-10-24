@@ -49,7 +49,7 @@ Following [](sec:LinearModels) we will apply the linear machine learning model
 \MLmodel{\weights \, ; \, \inputs_i} = \inputs_i \cdot \weights,
 \end{equation}
 
-where $\weights$ is a $p \times 1$ column vector of model parameters. These are known as weights in this context. We might also simplify the notation and write $MLoutput_i = \MLmodel{\inputs_i}$. 
+where $\weights$ is a $p \times 1$ column vector of model parameters. These are known as weights in this context. We might also simplify the notation and write $\MLoutput_i = \MLmodel{\inputs_i}$. 
 
 A machine learning regression analysis aims at finding the model parameters $\weights$ such that a selected cost function is minimized. This optimization step  is the learning part of the model. The cost function is supposed to measure the performance of the model
 
