@@ -486,4 +486,42 @@ Here we list some of the important limitations of supervised neural network base
 Some of these remarks are particular to DNNs, others are shared by all supervised learning methods. This motivates the use of unsupervised methods which in part circumvent these problems.
 
 
+## Exercises
+
+```{exercise} Weights and signal propagation of a simple neural netwrok
+:label: exercise:NeuralNet:simple-network
+
+'{figure} ./figs/fig-NeuralNet-simple.pdf`
+
+Consider a neural network with two nodes in the input layer, one hidden layer with three nodes, and an output layer with one node (see figure). All active nodes (i.e., those that map input signals to an output via an activation function) employ the same activation function $f(z) = 1 / (1 + e^{-z})$ and include a bias weight when computing the activation $z$.
+
+a) How many free (trainable) parameters does this neural network have?
+b) Write an explicit expression for the output signal $y$ from the output node as a function of its weights $(w^2_{11}, w^2_{12},w^2_{13})$, bias weight $b^2_1$, and the signals $(y^1_1, y^1_2,y^1_3)$ coming from the nodes in the hidden layer.
+c) Write a vector expression for the activations $(z^1_1, z^1_2, z^1_3)$ of the three nodes in the hidden layer given a vector of inputs $(x_1, x_2)$ and a matrix that contains the weights of the hidden layer and a vector that contains the bias weights. Be explicit how the weights are ordered in the matrix such that the activation vector can be obtained with matrix-vector operations.
+d) How can the above expression be generalized to handle a scenario when there are four instances of input data?
+
+$$
+\boldsymbol{X} = \begin{pmatrix}
+x^{(1)}_1 & x^{(1)}_2  \\
+x^{(2)}_1 & x^{(2)}_2  \\
+x^{(3)}_1 & x^{(3)}_2  \\
+x^{(4)}_1 & x^{(4)}_2  
+\end{pmatrix}
+$$
+```
+
+## Solutions
+
+```{solution} exercise:NeuralNet:simple-network
+:label: solution:NeuralNet:simple-network
+:class: dropdown
+
+a) Trainable parameters are in the active nodes which, in this case, are the nodes in the hidden layer and the output layer. There are three weights per node in the hidden layer (two linear ones multiplying the two input signals and one bias) and four weights in the output node (three linear weights and one bias). Therefore, in total, there are $3 \times 3 + 4 = 13$.
+b) $y = 1 / (1+e^{-z})$, where $z = w^2_{11} y^1_1 + w^2_{12} y^1_2 + w^2_{13} y^1_3 + b^2_1$.
+c) $\boldsymbol{z}^{1} = \boldsymbol{x} \cdot \boldsymbol{W}^{1} + \boldsymbol{b}^{1}$, where $\boldsymbol{z}^{1} = (z^1_1, z^1_2, z^1_3)$, $\boldsymbol{x} = (x_1, x_2)$, $\boldsymbol{b}^{1} = (b^1_1, b^1_2,b^1_3)$ are all row vectors and $\boldsymbol{W}^{1} = \begin{pmatrix}
+w^{1}_{11} & w^{1}_{12} & w^{1}_{13} \\
+w^{1}_{21} & w^{1}_{22} & w^{1}_{23}
+\end{pmatrix}$ is a $2 \times 3$ matrix.
+d) It would look the same $\boldsymbol{Z}^{1} = \boldsymbol{X} \cdot \boldsymbol{W}^{1} + \boldsymbol{b}^{1}$ but $\boldsymbol{Z}^{1}$ would now be a $4 \times 3$ matrix with each row containing the hidden layer node activations for the corresponding instance of input data (row in $\boldsymbol{X}$). Applying the activation function $f(z)$ to each element of this matrix would give the corresponding output signals $\boldsymbol{Y}^{1}$ as another $4 \times 3$ matrix.
+```
 
