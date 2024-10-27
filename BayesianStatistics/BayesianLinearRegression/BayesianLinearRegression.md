@@ -21,22 +21,30 @@ kernelspec:
 -- Pierre Simon de Laplace
 ```
 
-In this chapter we use Bayes' theorem to infer a (posterior) probability density function for parameters of the linear model, conditional on $\data$. This approach expands on the ordinary linear regression method outlined in the chapter on [](sec:LinearModels). If you have not read that chapter yet, please do so now since we will build on this and also use some of the notation introduced there. A large fraction of the text in this chapter was written by Andreas Ekström.
+In this chapter we use Bayes' theorem to infer a (posterior) probability density function for parameters of the linear model, conditional on $\data$. This approach expands on the ordinary linear regression method outlined in {numref}`sec:LinearModels`. If you have not read that chapter yet, please do so now since we will build on this and also use some of the notation introduced there. 
 
 The advantages of doing *Bayesian* instead of ordinary (frequentist) linear regression are many. The Bayesian approach yields a probability distribution for the unknown parameters and for future model predictions. It also enables us to make all assumptions explicit whereas the frequentist approach puts nearly all emphasis on the collected data. 
 
-In the Bayesian approach we start from Bayes' theorem {eq}`eq_bayes` which implies that we must make (prior) assumptions for the model parameters. In most cases we will then have to resort to numerical evaluation (or sampling) of the posterior. However, certain combinations of likelihoods and priors facilitate analytical derivation of the posterior. In this chapter we will explore one such situation and also show how we can recover the results from the ordinary least squares approach. A slightly more general situation is explored in the next chapter where we introduce so called **conjugate priors** that have a clever functional relationship with the relevant likelihood that again facilitate analytical derivation. 
+In the Bayesian approach to parameter estimation we start from Bayes' theorem {eq}`eq_bayes` which implies that we must make (prior) assumptions for the model parameters. In most realistic data analyses we will then have to resort to numerical evaluation (or sampling) of the posterior. However, certain combinations of likelihoods and priors facilitate analytical derivation of the posterior. In this chapter we will explore one such situation and also demonstrate how we can recover the results from an ordinary least squares approach with certain assumptions. A slightly more general approach involves so called **conjugate priors**. This class of probability distributions have clever functional relationships with corresponding likelihood distributions that facilitate analytical derivation. 
 
 
 ## Bayes' theorem for the normal linear model
 
-Recall from [](sec:LinearModels) that we are relating a (column) vector of data $\data$ to a linear model expressed in terms of its design matrix $\dmat$ and (column) vector of model parameters $\pars$
+Recall from {numref}`sec:LinearModels` that we are relating data $\data$ to the output of a linear model expressed in terms of its design matrix $\dmat$ and its model parameters $\pars$
 
 \begin{equation}
-\data = \dmat \pars + \boldsymbol{\epsilon}.
+\data = \dmat \pars + \residuals.
 \end{equation}
 
-In linear regression we made a leap of faith and decided that we were seeking an optimal set of parameters $\pars^*$ that minimize the 2-norm of the residual vector $\boldsymbol{\epsilon}$. Let us instead consider these residuals to statistically describe the mismatch between our model and observations as in Eq. {eq}`eq:DataModelsPredictions:mismatch`. Knowledge (and/or assumptions) concerning the error terms then allows to assign a statistical model in which the residuals are (random) variables that are distributed according to a PDF
+For the special case of one dependent, response variable ($\output$) and a single independent variable ($\inputt$) the data set ($\data$) and the residual vector ($\residuals$) are both $N_d \times 1$ column vector with $N_d$ the length of the data set. The design matrix ($\dmat$) has dimension $N_d \times N_p$ and the parameter vector ($\pars$) is $N_p \times 1$.
+
+In linear regression using the ordinary least-squares method we made a leap of faith and decided that we were seeking a "best" model with an optimal set of parameters $\pars^*$ that minimizes the  Euclidean norm of the residual vector $\residuals$. We then found that these were given by the normal equation {eq}`eq:NormalEquation` with solution {eq}`eq:LinearModels:OLS_optimum`
+
+$$
+\pars^* =\left(\dmat^T\dmat\right)^{-1}\dmat^T\data.
+$$
+
+Let us instead consider a statistical model for these residuals which describe the mismatch between our model and observations as in Eq. {eq}`eq:DataModelsPredictions:mismatch`. Knowledge (and/or assumptions) concerning measurement uncertainties, or modeling errors, then allows to describe the residuals as a vector of random variables that are distributed according to a PDF
 
 \begin{equation}
 \residuals \sim \pdf{\residuals}{I},
@@ -44,27 +52,23 @@ In linear regression we made a leap of faith and decided that we were seeking an
 
 where we introduce the relation $\sim$ to indicate how a (random) variable is *distributed*. 
 
-A very common assumption is that errors are normally distributed with zero mean. As before we let $N_d$ denote the number of data points in the (column) vector $\data$. Introducing the $N_d \times N_d$ error covariance matrix $\covres$ we then have
+A very common assumption is that errors are normally distributed with zero mean. As before we let $N_d$ denote the number of data points in the (column) vector $\data$. Introducing the $N_d \times N_d$ covariance matrix $\covres$ for the errors we then have
 
 $$
 \pdf{\residuals}{\covres, I} = \mathcal{N}(\zeros,\covres).
 $$ (eq:BayesianLinearRegression:ResidualErrors)
 
-Having an error model will make it possible to write the data likelihood and using Bayes' theorem we can write
+Having such a statistical model for the errors makes it possible to derive an expression for the data likelihood $\pdf{\data}{\pars,\covres,I}$ (see below). Using Bayes' theorem {eq}`eq:BayesTheorem:bayes-theorem-for-data` we can then "invert" this conditional probability distribution and write the parameter posterior
 
 $$
-\pdf{\pars}{\data, \covres, I} = \frac{\pdf{\data}{\pars,\covres,I}\pdf{\pars}{I}}{\pdf{\data}{I}},
+\pdf{\pars}{\data, \covres, I} = \frac{\pdf{\data}{\pars,\covres,I}\pdf{\pars}{I}}{\pdf{\data}{I}}.
 $$ (eq:BayesianLinearRegression:BayesTheorem)
 
-where we have assumed that the error model given by $\covres$ is known.
-To evaluate the posterior, i.e., the left-hand side, we must develop expressions for the factors in the numerator on the right-hand side: the likelihood $\pdf{\data}{\pars,\covres,I}$ and the prior $\pdf{\pars}{I}$. Note that the prior does not depend on the error model. The denominator $\pdf{\data}{I}$, sometimes known as the evidence, is an overall normalization constant that becomes irrelevant for the task of parameter estimation. It is typically quite challenging, if not impossible, to evaluate the evidence for a multivariate inference problem unless in some very special cases. In this chapter we will only be dealing with analytically tractable problems and will therefore (in principle) be able to evaluate also the evidence.
+To evaluate this posterior we must have expressions for both factors in the numerator on the right-hand side: the likelihood $\pdf{\data}{\pars,\covres,I}$ and the prior $\pdf{\pars}{I}$. Note that the prior does not depend on the data and the error model. The denominator $\pdf{\data}{I}$, sometimes known as the evidence, becomes irrelevant for the task of parameter estimation since it does not depend on $\pars$. It is typically quite challenging, if not impossible, to evaluate the evidence for a multivariate inference problem unless in some very special cases. In this chapter we will only be dealing with analytically tractable problems and will therefore (in principle) be able to evaluate also the evidence.
 
 ```{admonition} Discuss
-Why is it irrelevant to compute the evidence when doing parameter estimation? 
-```
-
-```{admonition} Discuss
-Can you think of why it is so challenging to compute the evidence? 
+- Why is it possible to perform parameter estimation without computing the evidence? 
+- Can you think of why it is so challenging to compute the evidence? 
 ```
 
 ## The likelihood
@@ -84,41 +88,56 @@ Let's first consider a single data $\data_i$ and the corresponding model predict
 \pdf{\data_i}{\pars,\sigmai^2,I}.
 \end{equation}
 
-We can follow the recipe in [](sec:BayesianAdvantages:ChangingVariables), since the relation between data and residual is a simple transformation, and find 
+We can follow the recipe in {numref}`Chapter {number}: {name} <sec:BayesianAdvantages:ChangingVariables>`, since the relation between data and residual is a simple linear transformation $\data_i = \modeloutput_i + \varepsilon_i$, and find 
 
 \begin{align}
-\pdf{\data_i}{\pars,\sigmai^2,I} &= \pdf{\varepsilon_i = \data_i - M_i}{\pars,\sigmai^2,I} \\
-&= \frac{1}{\sqrt{2\pi}\sigmai} \exp \left[ -\frac{(\data_i - M_i)^2}{2\sigmai^2} \right]
+\pdf{\data_i}{\pars,\sigmai^2,I} &= \pdf{\varepsilon_i = \data_i - \modeloutput_i}{\pars,\sigmai^2,I} \left| \frac{d \varepsilon_i}{d \data_i} \right|\\
+&= \frac{1}{\sqrt{2\pi}\sigmai} \exp \left[ -\frac{(\data_i - \modeloutput_i)^2}{2\sigmai^2} \right]
 \end{align}
 
-where we used that $\epsilon_i \sim \mathcal{N}(0,\sigmai^2)$. Note that the parameter dependence sits in $M_i$.
+where we used that $\epsilon_i \sim \mathcal{N}(0,\sigmai^2)$. Note that the parameter dependence sits in $\modeloutput_i \equiv \modeloutput(\pars, \inputs_i)$.
 
-Furthermore, since we assume that the residuals are independent we find that the total likelihood becomes a simple product of the individual ones
+Furthermore, since we assume that the residuals are independent we find that the total likelihood becomes a product of the individual ones
 
 $$
 \pdf{\data}{\pars,\sigmas^2,I} &= \prod_{i=0}^{N_d-1} \pdf{\data_i}{\pars,\sigmai^2,I} \\
 &= \left(\frac{1}{2\pi}\right)^{N_d/2} \frac{1}{\left| \covres \right|^{1/2}} \exp\left[ -\frac{1}{2} (\data - \dmat \pars)^T \covres^{-1} (\data - \dmat \pars) \right],
 $$ (eq_normal_likelihood)
 
-where we note that the diagonal form of $\covres$ implies that the exponent becomes a sum of residual terms and that $\left| \covres \right|^{1/2} = \prod_{i=0}^{N_d-1} \sigmai$.
+where we note that the diagonal form of $\covres$ implies that $\left| \covres \right|^{1/2} = \prod_{i=0}^{N_d-1} \sigmai$ and that the exponent becomes a sum of squared and weighted residual terms
 
-The likelihood is often viewed as a function of the parameters $\pars$ although one should note that this multivariate normal distribution is *not* normalized with respect to them since they are on the right hand side of the conditional. To emphasize the parameter dependence of the likelihood one sometimes denotes it as 
+$$
+-\frac{1}{2} (\data - \dmat \pars)^T \covres^{-1} (\data - \dmat \pars) = -\frac{1}{2} \sum_{i=0}^{N_d - 1} \frac{(\data_i - (\dmat \pars)_i)^2}{\sigma_i^2}.
+$$
+
+In the special case that all residuals are both *independent and identically distributed* (i.i.d.) we have that all variances are the same, $\sigmai^2 = \sigmares^2$, and the full covariance matrix is completely specified by a single parameter $\sigmares^2$. For this special case, the likelihood becomes
+
+$$
+\pdf{\data}{\pars,\sigmares^2,I} = \left(\frac{1}{2\pi\sigmares^2}\right)^{N_d/2} \exp\left[ -\frac{1}{2\sigmares^2} \sum_{i=0}^{N_d - 1} (\data_i - (\dmat \pars)_i)^2 \right].
+$$ (eq_normal_iid_likelihood)
+
+```{caution} 
+From a computational perspective it is always better to write sums, such as the one in the exponent of {eq}`eq_normal_iid_likelihood`, as vector-matrix operatons rather than as for-loops. For computational performance it should be implemented as $(\data - \dmat \pars)^T (\data - \dmat \pars)$ to employ powerful optimizations for vectorized operations in existing numerical libraries (such as [`numpy`](https://numpy.org/) in `python` and [`gsl`](https://www.gnu.org/software/gsl/), [`mkl`](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html) for C and other compiled programming languages).
+```
+
+```{admonition} Two views on the likelihood
+The likelihood describes the probability distribution for observed data given a specific data-generating process (as indicated by the given information on the right-hand side of the conditional). Since observed data is generated stochastically, it is characterized by a probabibility distribution.
+
+- View 1: Assuming fixed values of $\pars$; what are long-term frequencies of future data observations as described bu the likelihood? 
+- View 2: Focusing on the data $\data_\mathrm{obs}$ that we have; how does the likelihood for this data set depend on the values of the model parameters?
+
+This second view is the one that we will be adopting when allowing model parameters to be associated with probability distributions. The likelihood still describes the probability for observing a set of data, but we emphasize its parameter dependence by writing
 
 \begin{equation}
 \pdf{\data}{\pars,\sigma^2,I} = \mathcal{L}(\pars).
 \end{equation}
 
-Upon multiplication with the prior $\pdf{\pars}{I}$ and normalization by the evidence $\pdf{\data}{I}$ the right-hand side of Eq. {eq}`eq:BayesianLinearRegression:BayesTheorem` regains the status of a probability density, as it should.
-
-In the special case that all residuals are both *independent and identically distributed* (i.i.d.) we have that all variances are the same, $\sigmai^2 = \sigmares^2$, and the full covariance matrix is completely specified by a single parameter $\sigmares^2$. For this special case, the likelihood becomes
-
-$$
-\pdf{\data}{\pars,\sigmares^2,I} = \left(\frac{1}{2\pi\sigmares^2}\right)^{N_d/2} \exp\left[ -\frac{1}{2}\frac{(\data - \dmat \pars)^T(\data - \dmat \pars)}{\sigmares^2} \right].
-$$ (eq_normal_iid_likelihood)
+This function is **not** a probability distribution for model parameters. The parameter posterior, left-hand side of Eq. {eq}`eq:BayesianLinearRegression:BayesTheorem`, regains status as a probability density for $\pars$ since the likelihood is multiplied with the prior $\pdf{\pars}{I}$ and normalized by the evidence $\pdf{\data}{I}$.
+```
 
 ## The prior
 
-Next we assign a prior probability $\pdf{\pars}{I}$ for the model parameters. In order to facilitate analytical expressions we will explore two options: (i) a very broad, uniform prior, and (ii) a Gaussian prior. For simplicity, we consider both these priors to have zero mean and with all parameters being i.i.d. 
+Next we assign a prior probability $\pdf{\pars}{I}$ for the model parameters. In order to facilitate analytical expressions we will explore two options: (i) a very broad, uniform prior, and (ii) a Gaussian prior. For simplicity, we consider both these priors to have zero mean and with all model parameters being i.i.d. 
 
 The uniform prior for the $N_p$ parameters is then
 
@@ -143,21 +162,23 @@ with $\sigma_\para$ the standard deviation of the prior for all parameters.
 
 ## The posterior
 
-Given the likelihood with i.i.d. errors {eq}`eq_normal_iid_likelihood` and the two alternative priors, {eq}`eq:BayesianLinearRegression:uniform_iid_prior` and {eq}`eq:BayesianLinearRegression:gaussian_iid_prior`, we will derive an expression for the posterior up to a multiplicative normalization constant. 
+Given the likelihood with i.i.d. errors {eq}`eq_normal_iid_likelihood` and the two alternative priors, {eq}`eq:BayesianLinearRegression:uniform_iid_prior` and {eq}`eq:BayesianLinearRegression:gaussian_iid_prior`, we will derive the corresponding two expressions for the posterior (up to multiplicative normalization constants). 
 
-First, let us rewrite the likelihood in a way that is made possible by the fact that we are considering a linear model. Despite the fact that the likelihood is a PDF for the data one can show, via Taylor expansion around the mode, that it is proportional to a multivariate normal distribution for the model parameters
+### Rewriting the likelihood
+
+First, let us rewrite the likelihood in a way that is made possible by the fact that we are considering a linear model. Despite the fact that the likelihood is a probability distribution for the data one can show, via a Taylor expansion around the mode of the likelihood seen as a function of model parameters, that it is proportional to a multivariate normal distribution for the model parameters
 
 $$
-\pdf{\data}{\pars,\sigmares^2,I} \propto \exp\left[ -\frac{1}{2} (\pars-\pars^*)^T \covpars^{-1} (\pars-\pars^*) \right],
+\pdf{\data}{\pars,\sigmares^2,I} = \mathcal{L}(\pars) \propto \exp\left[ -\frac{1}{2} (\pars-\pars^*)^T \covpars^{-1} (\pars-\pars^*) \right],
 $$ (eq:BayesianLinearRegression:likelihood_pars)
 
-where $\pars^* = \left(\dmat^T\dmat\right)^{-1}\dmat^T\data$ is the solution {eq}`eq:LinearModels:OLS_optimum` of ordinary linear regression and 
+where the data-dependence sits in $\pars^* = \pars^*(\data) = \left(\dmat^T\dmat\right)^{-1}\dmat^T\data$, which is the solution {eq}`eq:LinearModels:OLS_optimum` of the normal equation. Furthermore, 
 
 $$
 \covpars^{-1} = \frac{\dmat^T\dmat}{\sigmares^2},
 $$ (eq:BayesianLinearRegression:likelihood_hessian)
 
-is the Hessian with respect to model parameters of the negative log-likelihood.
+is the Hessian of the negative log-likelihood with $\covres = \mathrm{diag}(\sigmas^2)$.
 
 ```{exercise} Prove the Gaussian likelihood
 :label: exercise:BayesianLinearRegression:likelihood_pars
@@ -167,19 +188,19 @@ Prove Eq. {eq}`eq:BayesianLinearRegression:likelihood_pars`.
 
 ### Posterior with a uniform prior
 
-Let us first consider a uniform prior as expressed in Eq. {eq}`eq:BayesianLinearRegression:uniform_iid_prior`. The prior can be considered very broad if its boundaries $\pm \Delta\para/2$ are very far from the mode of the likelihood {eq}`eq:BayesianLinearRegression:likelihood_pars`, where distance is measured in terms of standard deviations. This implies that the posterior
+Let us first consider a uniform prior as expressed in Eq. {eq}`eq:BayesianLinearRegression:uniform_iid_prior`. The prior can be considered very broad if its boundaries $\pm \Delta\para/2$ are very far from the mode of the likelihood {eq}`eq:BayesianLinearRegression:likelihood_pars`. The "distance" in this statement is measured in terms of standard deviations. A "far distance", therefore, implies that $\pdf{\data}{\pars,\sigmares^2,I}$ is very close to zero. This implies that the posterior
 
 \begin{equation}
 \pdf{\pars}{\data,\sigmares^2,I} \propto \pdf{\data}{\pars,\sigmares^2,I} \pdf{\pars}{I},
 \end{equation}
 
-becomes proportional to the data likelihood with the prior just truncating the distribution at very large distances (that contained a negligible probability mass). Thus we find
+simply becomes proportional to the data likelihood (with the prior just truncating the distribution at very large distances that would have contained a negligible probability mass). Thus we find
 
 $$
-\pdf{\pars}{\data,\sigmares^2,I} \propto \exp\left[ -\frac{1}{2} (\pars-\pars^*)^T \covpars^{-1} (\pars-\pars^*) \right],
+\pdf{\pars}{\data,\sigmares^2,I} \propto \exp\left[ -\frac{1}{2} (\pars-\optpars)^T \covpars^{-1} (\pars-\optpars) \right],
 $$ (eq:BayesianLinearRegression:posterior_with_iid_uniform_prior)
 
-if all $\para_i \in [-\Delta\para/2, +\Delta\para/2]$ while it is zero elsewhere. The mode of this distribution is obviously the mean vector $\pars^*$. We can therefore say that we have recovered the ordinary least-squares result with the interpretation that this solution is the maximum of the posterior PDF (sometimes known as the maximum a posteriori, or MAP).
+if all $\para_i \in [-\Delta\para/2, +\Delta\para/2]$ while it is zero elsewhere. The mode of this distribution is obviously the mean vector $\optpars = \optpars(\data)$. We can therefore say that we have recovered the ordinary least-squares result. Now the interpretation is that this solution is the maximum of the posterior PDF (sometimes known as the maximum a posteriori, or MAP).
 
 ```{admonition} Discuss
 In light of this result, what assumption(s) are implicit in linear regression while they are made explicit in Bayesian linear regression?
@@ -188,38 +209,46 @@ In light of this result, what assumption(s) are implicit in linear regression wh
 
 ### Posterior with a Gaussian prior
 
-Assigning instead a Gaussian prior as expressed in Eq. {eq}`eq:BayesianLinearRegression:gaussian_iid_prior` corresponds to a situation in which we have prior information on the expected magnitude of model parameters. The posterior is then proportional to the product of two multivariate normal distributions
+Assigning instead a Gaussian prior for the model parameters, as expressed in Eq. {eq}`eq:BayesianLinearRegression:gaussian_iid_prior`, we have that the posterior is proportional to the product of two exponential functions
 
 $$
 \pdf{\pars}{\data,\sigmares^2,I} &\propto \exp\left[ -\frac{1}{2} (\pars-\pars^*)^T \covpars^{-1} (\pars-\pars^*) \right] \exp\left[ -\frac{1}{2}\frac{\pars^T\pars}{\sigma_{\para}^2} \right] \\
-&= \exp\left[ -\frac{1}{2} (\pars-\tilde{\pars})^T \tildecovpars^{-1} (\pars-\tilde{\pars}) \right],
+&\propto \exp\left[ -\frac{1}{2} (\pars-\tilde{\pars})^T \tildecovpars^{-1} (\pars-\tilde{\pars}) \right].
 $$ (eq:BayesianLinearRegression:posterior_with_iid_gaussian_prior)
 
-i.e., another Gaussian with covariance matrix and mean vector
+The second proportionality is a consequence of both exponents being quadratic in the model parameters, and therefore that the full expression looks like the product of two Gaussians. The resulting Gaussian distribution has mean vector and (inverse) covariance matrix given by
 
 $$
-\tildecovpars^{-1} &= \covpars^{-1} + \sigma_{\para}^{-2} \boldsymbol{1} \\
-\tilde{\pars} &= \tildecovpars \covpars^{-1} \pars^*
+\tilde{\pars} &= \tildecovpars \covpars^{-1} \optpars \\
+\tildecovpars^{-1} &= \covpars^{-1} + \sigma_{\para}^{-2} \boldsymbol{1} 
 $$ (eq:BayesianLinearRegression:posterior_pars_with_iid_gaussian_prior)
 
-where $\boldsymbol{1}$ is the $N_p \times N_p$ unit matrix. In effect, the prior distribution becomes the posterior one via an inference process that involves learning from data. In this particular case, the inference returns a Gaussian PDF with updated parameters where the mode changes from $\boldsymbol{0}$ to $\tilde{\pars}$ and the variance from $\sigma_{\para}^2$ in all directions to the covariance matrix $\tildecovpars$.
+where $\boldsymbol{1}$ is the $N_p \times N_p$ unit matrix. In effect, the prior normal distribution becomes updated to a posterior normal distribution via an inference process that involves learning from data. In this particular case, the mode changes from $\boldsymbol{0}$ to $\tilde{\pars}$ and the covariance from a diagonal structure with $\sigma_{\para}^2$ in all directions to the covariance matrix $\tildecovpars$.
 
 ```{admonition} Discuss
-What happens if the data is of high quality (sharply peaked around $\pars^*$), and what happens if it is of poor quality (providing a very broad likelihood distribution)?
+What happens if the data is of high quality (i.e., the likelihood $\mathcal{L}(\pars) is sharply peaked around $\optpars$), and what happens if it is of poor quality (providing a very broad likelihood distribution)?
 ```
-
 
 ### Marginal posterior distributions
 
-Next, we will explore a useful transformation property of $\mathcal{N}-$distributions. Let $\mathbf{Y}$ be a multivariate $\mathcal{N}$-distributed random variable. Consider a matrix $\boldsymbol{A}$ and (column) vector $\boldsymbol{b}$. Then, the random variable $\mathbf{Z} = \boldsymbol{A} \mathbf{Y} + \boldsymbol{b}$ is also multivariate $\mathcal{N}$-distributed with the PDF
+Given a multivariate probability distribution we are often interested in lower dimension, marginal distributions. Consider for example $pars^T = [\pars_1^T, \pars_2^T$], that is partitioned into respective dimensions $D_1$ and $D_2$. The marginal distribution corresponds to the integral
 
 $$
-\mathcal{N} (\mathbf{Z}|\mathbf{A}\boldsymbol{\mu} + \boldsymbol{b},\boldsymbol{A}\boldsymbol{\Sigma}\boldsymbol{A}^T),
+\p{\pars_2} = \int d\pars_1 \p{\pars}.
 $$
 
-where we use the $\mathcal{N} (\mathbf{X} | \mathbf{\mu}, \mathbf{\Sigma})$ notation to emphasize which variable that is normally distributed.
 
-From this we can obtain marginal $\mathcal{N}$-distributions, i.e., the distributions for which we have integrated over some $\pars$-directions. Assume we have a $(D_1+D_2)$-dimensional $\mathcal{N}$-distributed random variable $\mathbf{X} = [\mathbf{X}_1, \mathbf{X}_2]^T$, here partitioned into respective dimensions $D_1$ and $D_2$, with $\boldsymbol{\mu} = [\boldsymbol{\mu}_1,\boldsymbol{\mu}_2]^T$ and
+```{admonition} Transformation property of multivariate normal distributions
+Let $\mathbf{Y}$ be a multivariate normal-distributed random variable of length $N_p$ with mean vector $\boldsymbol{\mu}$ and covariance matrix $\boldsymbol{\Sigma}$. We use the notation $\psub{\mathbf{Y}}{\mathbf{y}} = \mathcal{N} (\mathbf{y} | \mathbf{\mu}, \mathbf{\Sigma})$ to emphasize which variable that is normally distributed.
+
+Consider now a general $N_p \times N_p$ matrix $\boldsymbol{A}$ and $N_p \times 1$ vector $\boldsymbol{b}$. Then, the random variable $\mathbf{Z} = \boldsymbol{A} \mathbf{Y} + \boldsymbol{b}$ is also multivariate normal-distributed with the PDF
+
+$$
+\psub{\mathbf{Z}}{\mathbf{z}} = \mathcal{N} (\mathbf{z} \vert \mathbf{A}\boldsymbol{\mu} + \boldsymbol{b},\boldsymbol{A}\boldsymbol{\Sigma}\boldsymbol{A}^T).
+$$ (eq:BayesianLinearRegression:transformed-normal)
+```
+
+For multivariate normal distributions we can employ a useful transformation property, shown in Eq. {eq}`eq:BayesianLinearRegression:transformed-normal`. Considering the posterior {eq}`eq:BayesianLinearRegression:posterior_with_iid_gaussian_prior` we partition the parameters $\pars^T = [\pars_1^T, \pars_2^T$] and the mean vector and covariance matrix into $\boldsymbol{\mu}^T = [\boldsymbol{\mu}_1^T,\boldsymbol{\mu}_2^T]$ and
 
 $$
 \boldsymbol{\Sigma} = \left[
@@ -230,7 +259,7 @@ $$
 \right].
 $$
 
-We can transform to either marginal distribution by setting, e.g.,
+We can obtain the marginal distribution for $\pars_2$ by setting
 
 $$
 \mathbf{A} = \left[
@@ -238,21 +267,22 @@ $$
         0 & 0 \\
         0 & \mathbf{1}_{D_2\times D_2}
     \end{array}
-\right], \,\, \mathbf{b} = 0
+\right], \,\, \mathbf{b} = 0,
 $$
 
-This yields the marginal density 
+which yields 
 
 $$
-\mathcal{N}(\mathbf{X}_2|\boldsymbol{\mu}_2,\boldsymbol{\Sigma}_{22}).
+\pdf{\pars_2}{\data, I} = 
+\mathcal{N}(\pars_2|\boldsymbol{\mu}_2,\boldsymbol{\Sigma}_{22}).
 $$ (eq_marginal_N)
 
 (sec:ppd)=
 ## The posterior predictive
 
-One can also derive the posterior predictive distribution (PPD), i.e., the probability distribution for predictions $\widetilde{\boldsymbol{\mathcal{F}}}$ given the model $M$ and a set of new inputs for the independent variable $\boldsymbol{x}$. The new inputs also give rise to a new design matrix $\widetilde{\dmat}$.
+One can also derive the posterior predictive distribution (PPD), i.e., the probability distribution for predictions $\widetilde{\boldsymbol{\mathcal{F}}}$ given the model $M$ and a set of new inputs for the independent variable $\boldsymbol{x}$. The new inputs give rise to a new design matrix $\widetilde{\dmat}$.
 
-We obtain the posterior predictive distribution by marginalizing over the uncertain model parameters that we just inferred from the old data $\data$.
+We obtain the posterior predictive distribution by marginalizing over the uncertain model parameters that we just inferred from the given data $\data$.
 
 $$
 \pdf{\widetilde{\boldsymbol{\mathcal{F}}}}{\data}
@@ -264,6 +294,8 @@ where both distributions in the integrand can be expressed as Gaussians. Alterna
 $$
 \left\{ \widetilde{\dmat} \pars \, : \, \pars \sim \pdf{\pars}{\data,\sigmares^2,I} \right\}.
 $$ (eq:BayesianLinearRegression:ppd_pdf_set)
+
+This set of predictions can be obtained if we have access to a set of samples from the parameter posterior.
 
 (sec:warmup)=
 ## Bayesian linear regression: warmup
