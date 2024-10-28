@@ -315,6 +315,15 @@ Consider a neural network with three nodes in the input layer, one hidden layer 
 - c) How would this expression have to be modified to handle a scenario when there are $N$ instances of input data, for which one would like to compute the corresponding network outputs?
 ```
 
+```{exercise} Linear signals
+:label: exercise:NeuralNet:linear-signal
+
+Consider a neural network with $p$ nodes in the input layer, one hidden layer with $L$ nodes, and an output layer with a single node. All nodes in the hidden layer employ the same activation function $f(z) = 1 / (1 + e^{-z})$ and include a bias weight when computing the activation $z$. The node in the output layer is linear.
+
+- a) Consider small signals and weights such that the output from the nodes in the hidden layer can be approximated by linear functions in the input $\inputs = (\inputt_1, \inputt_2, \ldots, \inputt_p)$. Write an expression for the output from one of these nodes.
+- b) Show that the final output from the network also becomes linear in the inputs and relate the coefficients of this expression to the weights of the network.
+```
+
 ## Solutions
 
 ```{solution} exercise:NeuralNet:simple-network
@@ -347,3 +356,28 @@ and $\boldsymbol{Y}^1 = f(\boldsymbol{Z}^1)$. Here,
 $\boldsymbol{Z}^{1} = \boldsymbol{X} \boldsymbol{W}^{1} + \boldsymbol{b}^{1}$ is now an $N \times 3$ matrix with each row containing the hidden layer node activations for the corresponding instance of input data (row in $\boldsymbol{X}$). Furthermore, signals $\boldsymbol{Y}^1$ and activations $\boldsymbol{Z}^2$ are both matrices with $N$ rows. Note, however, that the weight and bias matrices are the same.
 ```
 
+```{solution} exercise:NeuralNet:linear-signal
+:label: solution:NeuralNet:linear-signal
+:class: dropdown
+
+- a) The output of node 1: $y^1(z^1) = \frac{1}{1+1-z^1+\mathcal{O}((z^1)^2)} = \frac{1}{2} \left( 1 + \frac{z^1}{2} + \mathcal{O}((z^1)^2) \right)$.
+
+  With $z^1 = w^1_{10} + \sum_{i=1}^p w^1_{1i} x_i$ we find
+  
+  $$
+  y^1 = \frac{1}{2} + \frac{1}{4} \left( w^1_{10} + \sum_{i=1}^p w^1_{1i} x_i \right).
+  $$
+  
+- b) The final output is $y = w^2_{10} + \sum_{l=1}^L w^2_{1l} y^1_l$. The signals $y^1_l$ from the hidden layer are given by (a). We arrive at the linear signal
+
+  $$
+  y = k_0 + k_1 x_1 + k_2 x_2 + \ldots + k_L x_L
+  $$
+
+  with 
+
+  $$
+  k_0 &= \frac{L}{2} + w^2_{10} + \frac{1}{4} \sum_{l=1}^L w^1_{l0}, \\
+  k_i &= \frac{1}{4} \sum_{l=1}^L w^2_{1l} w^1_{li}.
+  $$
+```
