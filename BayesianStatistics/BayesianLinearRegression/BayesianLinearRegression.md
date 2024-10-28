@@ -117,13 +117,13 @@ $$
 $$ (eq_normal_iid_likelihood)
 
 ```{caution} 
-From a computational perspective it is always better to write sums, such as the one in the exponent of {eq}`eq_normal_iid_likelihood`, as vector-matrix operatons rather than as for-loops. For computational performance it should be implemented as $(\data - \dmat \pars)^T (\data - \dmat \pars)$ to employ powerful optimizations for vectorized operations in existing numerical libraries (such as [`numpy`](https://numpy.org/) in `python` and [`gsl`](https://www.gnu.org/software/gsl/), [`mkl`](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html) for C and other compiled programming languages).
+For computational performance it is always better (if possible) to write sums, such as the one in the exponent of {eq}`eq_normal_iid_likelihood`, in the form of vector-matrix operations rather than as for-loops. This particular sum should therefore be implemented as $(\data - \dmat \pars)^T (\data - \dmat \pars)$ to employ powerful optimization for vectorized operations in existing numerical libraries (such as [`numpy`](https://numpy.org/) in `python` and [`gsl`](https://www.gnu.org/software/gsl/), [`mkl`](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html) for C and other compiled programming languages).
 ```
 
 ```{admonition} Two views on the likelihood
-The likelihood describes the probability distribution for observed data given a specific data-generating process (as indicated by the given information on the right-hand side of the conditional). Since observed data is generated stochastically, it is characterized by a probabibility distribution.
+Since observed data is generated stochastically, through an underlying "data-generating process", it is appropriately described by a probabibility distribution. This is the "data likelihood" which describes the probability distribution for observed data given a specific data-generating process (as indicated by the information on the right-hand side of the conditional). 
 
-- View 1: Assuming fixed values of $\pars$; what are long-term frequencies of future data observations as described bu the likelihood? 
+- View 1: Assuming fixed values of $\pars$; what are long-term frequencies of future data observations as described by the likelihood? 
 - View 2: Focusing on the data $\data_\mathrm{obs}$ that we have; how does the likelihood for this data set depend on the values of the model parameters?
 
 This second view is the one that we will be adopting when allowing model parameters to be associated with probability distributions. The likelihood still describes the probability for observing a set of data, but we emphasize its parameter dependence by writing
@@ -162,23 +162,23 @@ with $\sigma_\para$ the standard deviation of the prior for all parameters.
 
 ## The posterior
 
-Given the likelihood with i.i.d. errors {eq}`eq_normal_iid_likelihood` and the two alternative priors, {eq}`eq:BayesianLinearRegression:uniform_iid_prior` and {eq}`eq:BayesianLinearRegression:gaussian_iid_prior`, we will derive the corresponding two expressions for the posterior (up to multiplicative normalization constants). 
+Given the likelihood with i.i.d. errors {eq}`eq_normal_iid_likelihood` and the two alternative priors, {eq}`eq:BayesianLinearRegression:uniform_iid_prior` and {eq}`eq:BayesianLinearRegression:gaussian_iid_prior`, we will derive the corresponding two different expressions for the posterior (up to multiplicative normalization constants). 
 
 ### Rewriting the likelihood
 
-First, let us rewrite the likelihood in a way that is made possible by the fact that we are considering a linear model. Despite the fact that the likelihood is a probability distribution for the data one can show, via a Taylor expansion around the mode of the likelihood seen as a function of model parameters, that it is proportional to a multivariate normal distribution for the model parameters
+First, let us rewrite the likelihood in a way that is made possible by the fact that we are considering a linear model. Given the quadratic dependence on model parameters in the exponent one can show (by performing a Taylor expansion of the log likelihood around the mode) that the likelihood becomes proportional to the functional form of a multivariate normal distribution for the model parameters
 
 $$
-\pdf{\data}{\pars,\sigmares^2,I} = \mathcal{L}(\pars) \propto \exp\left[ -\frac{1}{2} (\pars-\pars^*)^T \covpars^{-1} (\pars-\pars^*) \right],
+\pdf{\data}{\pars,\sigmares^2,I} = \pdf{\data}{\optpars,\sigmares^2,I} \exp\left[ -\frac{1}{2} (\pars-\optpars)^T \covrespars^{-1} (\pars-\optpars) \right].
 $$ (eq:BayesianLinearRegression:likelihood_pars)
 
-where the data-dependence sits in $\pars^* = \pars^*(\data) = \left(\dmat^T\dmat\right)^{-1}\dmat^T\data$, which is the solution {eq}`eq:LinearModels:OLS_optimum` of the normal equation. Furthermore, 
+Note that this expression still describes a probability distribution for the data. The data dependence sits in the amplitude of the mode, $\pdf{\data}{\optpars,\sigmares^2,I}$, and its position, $\optpars = \optpars(\data) = \left(\dmat^T\dmat\right)^{-1}\dmat^T\data$. The latter is the solution {eq}`eq:LinearModels:OLS_optimum` of the normal equation. Furthermore, the statistical model for the errors (here with $\covres = \mathrm{diag}(\sigmares^2)$) enter in the covariance matrix,
 
 $$
-\covpars^{-1} = \frac{\dmat^T\dmat}{\sigmares^2},
+\covrespars^{-1} = \frac{\dmat^T\dmat}{\sigmares^2},
 $$ (eq:BayesianLinearRegression:likelihood_hessian)
 
-is the Hessian of the negative log-likelihood with $\covres = \mathrm{diag}(\sigmas^2)$.
+which can be understood as the curvature (Hessian) of the negative log-likelihood.
 
 ```{exercise} Prove the Gaussian likelihood
 :label: exercise:BayesianLinearRegression:likelihood_pars
@@ -188,19 +188,19 @@ Prove Eq. {eq}`eq:BayesianLinearRegression:likelihood_pars`.
 
 ### Posterior with a uniform prior
 
-Let us first consider a uniform prior as expressed in Eq. {eq}`eq:BayesianLinearRegression:uniform_iid_prior`. The prior can be considered very broad if its boundaries $\pm \Delta\para/2$ are very far from the mode of the likelihood {eq}`eq:BayesianLinearRegression:likelihood_pars`. The "distance" in this statement is measured in terms of standard deviations. A "far distance", therefore, implies that $\pdf{\data}{\pars,\sigmares^2,I}$ is very close to zero. This implies that the posterior
+Let us first consider a uniform prior as expressed in Eq. {eq}`eq:BayesianLinearRegression:uniform_iid_prior`. The prior can be considered very broad if its boundaries $\pm \Delta\para/2$ are very far from the mode of the likelihood {eq}`eq:BayesianLinearRegression:likelihood_pars`. "Distance" in this context is measured in terms of standard deviations. A "far distance", therefore, implies that $\pdf{\data}{\pars,\sigmares^2,I}$ is very close to zero. This implies that the posterior
 
 \begin{equation}
 \pdf{\pars}{\data,\sigmares^2,I} \propto \pdf{\data}{\pars,\sigmares^2,I} \pdf{\pars}{I},
 \end{equation}
 
-simply becomes proportional to the data likelihood (with the prior just truncating the distribution at very large distances that would have contained a negligible probability mass). Thus we find
+simply becomes proportional to the data likelihood (with the prior just truncating the distribution at very large distances). Thus we find from Eq. {eq}`eq:BayesianLinearRegression:likelihood_pars`
 
 $$
-\pdf{\pars}{\data,\sigmares^2,I} \propto \exp\left[ -\frac{1}{2} (\pars-\optpars)^T \covpars^{-1} (\pars-\optpars) \right],
+\pdf{\pars}{\data,\sigmares^2,I} \propto \exp\left[ -\frac{1}{2} (\pars-\optpars)^T \covrespars^{-1} (\pars-\optpars) \right],
 $$ (eq:BayesianLinearRegression:posterior_with_iid_uniform_prior)
 
-if all $\para_i \in [-\Delta\para/2, +\Delta\para/2]$ while it is zero elsewhere. The mode of this distribution is obviously the mean vector $\optpars = \optpars(\data)$. We can therefore say that we have recovered the ordinary least-squares result. Now the interpretation is that this solution is the maximum of the posterior PDF (sometimes known as the maximum a posteriori, or MAP).
+if all $\para_i \in [-\Delta\para/2, +\Delta\para/2]$ while it is zero elsewhere. The mode of this distribution is obviously the mean vector $\optpars = \optpars(\data)$. We can therefore say that we have recovered the ordinary least-squares result. At this stage, however, the interpretation is that this parameter optimum corresponds to the maximum of the posterior PDF {eq}`eq:BayesianLinearRegression:posterior_with_iid_uniform_prior`. Such an optimum is sometimes known as the maximum a posteriori, or MAP.
 
 ```{admonition} Discuss
 In light of this result, what assumption(s) are implicit in linear regression while they are made explicit in Bayesian linear regression?
@@ -209,29 +209,29 @@ In light of this result, what assumption(s) are implicit in linear regression wh
 
 ### Posterior with a Gaussian prior
 
-Assigning instead a Gaussian prior for the model parameters, as expressed in Eq. {eq}`eq:BayesianLinearRegression:gaussian_iid_prior`, we have that the posterior is proportional to the product of two exponential functions
+Assigning instead a Gaussian prior for the model parameters, as expressed in Eq. {eq}`eq:BayesianLinearRegression:gaussian_iid_prior`, we find that the posterior is proportional to the product of two exponential functions
 
 $$
-\pdf{\pars}{\data,\sigmares^2,I} &\propto \exp\left[ -\frac{1}{2} (\pars-\pars^*)^T \covpars^{-1} (\pars-\pars^*) \right] \exp\left[ -\frac{1}{2}\frac{\pars^T\pars}{\sigma_{\para}^2} \right] \\
+\pdf{\pars}{\data,\sigmares^2,I} &\propto \exp\left[ -\frac{1}{2} (\pars-\optpars)^T \covrespars^{-1} (\pars-\optpars) \right] \exp\left[ -\frac{1}{2}\frac{\pars^T\pars}{\sigma_{\para}^2} \right] \\
 &\propto \exp\left[ -\frac{1}{2} (\pars-\tilde{\pars})^T \tildecovpars^{-1} (\pars-\tilde{\pars}) \right].
 $$ (eq:BayesianLinearRegression:posterior_with_iid_gaussian_prior)
 
-The second proportionality is a consequence of both exponents being quadratic in the model parameters, and therefore that the full expression looks like the product of two Gaussians. The resulting Gaussian distribution has mean vector and (inverse) covariance matrix given by
+The second proportionality is a consequence of both exponents being quadratic in the model parameters, and therefore that the full expression looks like the product of two Gaussians. This product is proportional to another Gaussian distribution which has mean vector and (inverse) covariance matrix given by
 
 $$
-\tilde{\pars} &= \tildecovpars \covpars^{-1} \optpars \\
-\tildecovpars^{-1} &= \covpars^{-1} + \sigma_{\para}^{-2} \boldsymbol{1} 
+\tilde{\pars} &= \tildecovpars \covrespars^{-1} \optpars \\
+\tildecovpars^{-1} &= \covrespars^{-1} + \sigma_{\para}^{-2} \boldsymbol{1} 
 $$ (eq:BayesianLinearRegression:posterior_pars_with_iid_gaussian_prior)
 
-where $\boldsymbol{1}$ is the $N_p \times N_p$ unit matrix. In effect, the prior normal distribution becomes updated to a posterior normal distribution via an inference process that involves learning from data. In this particular case, the mode changes from $\boldsymbol{0}$ to $\tilde{\pars}$ and the covariance from a diagonal structure with $\sigma_{\para}^2$ in all directions to the covariance matrix $\tildecovpars$.
+where $\boldsymbol{1}$ is the $N_p \times N_p$ unit matrix. In effect, what has happend is that the prior normal distribution becomes updated to a posterior normal distribution via an inference process that involves a data likelihood. In this particular case, learning from data implies that the mode changes from $\boldsymbol{0}$ to $\tilde{\pars}$ and the covariance from a diagonal structure with $\sigma_{\para}^2$ in all directions to the covariance matrix $\tildecovpars$.
 
 ```{admonition} Discuss
-What happens if the data is of high quality (i.e., the likelihood $\mathcal{L}(\pars) is sharply peaked around $\optpars$), and what happens if it is of poor quality (providing a very broad likelihood distribution)?
+What happens if the data is of high quality (i.e., the likelihood $\mathcal{L}(\pars)$ is sharply peaked around $\optpars$), and what happens if it is of poor quality (providing a very broad likelihood distribution)?
 ```
 
 ### Marginal posterior distributions
 
-Given a multivariate probability distribution we are often interested in lower dimension, marginal distributions. Consider for example $pars^T = [\pars_1^T, \pars_2^T$], that is partitioned into respective dimensions $D_1$ and $D_2$. The marginal distribution corresponds to the integral
+Given a multivariate probability distribution we are often interested in lower dimension, marginal distributions. Consider for example $\pars^T = [\pars_1^T, \pars_2^T$], that is partitioned into respective dimensions $D_1$ and $D_2$. The marginal distribution corresponds to the integral
 
 $$
 \p{\pars_2} = \int d\pars_1 \p{\pars}.
@@ -415,9 +415,45 @@ In all cases you should compare the Bayesian inference with the results from Ord
 
 Hints:
 
-1. Identify the solution $\pars^*$ as the maximum of the likelihood by introducing $L(\pars)$ as the negative log-likelihood.
-2. Taylor expand $L(\pars)$ around $\pars^*$. For this you need the Hessian $\boldsymbol{H}$ with elements $H_{ij} = \left. \frac{\partial^2 L}{\partial\para_i\partial\para_j} \right|_{\pars = \pars^*}$.
-3. Compare with the Taylor expansion of a normal distribution $\mathcal{N}\left( \pars^*, \covpars \right)$.
+1. Identify $\optpars$ as the position of the mode of the likelihood by inspecting the negative log-likelihood $L(\pars)$ and comparing with the derivation of the normal equation.
+2. Taylor expand $L(\pars)$ around $\optpars$. For this you need to argue (or show) that the gradient vector $\nabla_{\pars} L(\pars) = 0$ at $\pars=\optpars$, and show that the Hessian $\boldsymbol{H}$ (with elements $H_{ij} = \frac{\partial^2 L}{\partial\para_i\partial\para_j}$) is a constant matrix $\boldsymbol{H} = \frac{\dmat^T\dmat}{\sigmares^2}$.
+3. Compare with the Taylor expansion of a normal distribution $\mathcal{N}\left( \pars \vert \optpars, \covpars \right)$.
+
+Full solution:
+
+- The likelihood can be written $\pdf{\data}{\pars,I} = \exp\left[ -L(\pars) \right]$, where we include information on the error distribution ($\sigmares$) in the conditional $I$. The negative log-likelihood, including the normalization factor, is
+
+$$
+L(\pars) = \frac{N_d}{2}\log(2\pi\sigmares^2) + \frac{1}{2\sigmares^2} \sum_{i=0}^{N_d - 1} (\data_i - (\dmat \pars)_i)^2.
+$$
+
+- Comparing with Eq. {eq}`eq:LinearRegression:cost-function` and the corresponding gradient vector {eq}`eq:LinearRegression:gradient` we find that
+
+  $$
+  \nabla_{\pars} L(\pars) = -\frac{\dmat^T\left( \data-\dmat\pars\right)}{\sigmares^2},
+  $$
+
+  which is zero at $\pars = \optpars = \left(\dmat^T\dmat\right)^{-1}\dmat^T\data$ corresponding to the solution of the normal equation.
+
+- We can Taylor expand $L(\pars)$ around $\pars=\optpars$ realizing that the linear (gradient) term is zero. Furthermore, the quadrating term depends on the second derivative (hessian) which is a constant matrix since $L$ only depends quadratically on the parameters
+
+$$
+H = \Delta L = \nabla_{\pars} \cdot (\nabla_{\pars} L(\pars)) = \frac{\dmat^T\dmat}{\sigmares^2}
+$$
+
+- Since higher derivatives therefore must be zero, the Taylor expansion actually terminates at second order
+
+$$
+L(\pars) = L(\optpars) + \frac{1}{2} (\pars-\optpars)^T \frac{\dmat^T\dmat}{\sigmares^2} (\pars-\optpars)
+$$
+
+- We introduce $\covrespars^{-1} \equiv {\dmat^T\dmat} / {\sigmares^2}$ and use that $\exp\left[ - L(\optpars) \right] = \pdf{\data}{\optpars,I}$. Therefore, evaluating $\exp\left[ -L(\pars) \right]$ gives
+
+  $$
+  \pdf{\data}{\pars,I} = \pdf{\data}{\optpars,I} \exp\left[ -\frac{1}{2} (\pars-\optpars)^T \covrespars^{-1} (\pars-\optpars) \right],
+  $$
+
+  as we wanted to show.
 ```
 
 
