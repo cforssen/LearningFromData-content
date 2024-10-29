@@ -68,7 +68,7 @@ The feed-forward neural network (FFNN) was the first and simplest type of artifi
 In {numref}`fig-NeuralNet-neuralnet` the nodes are represented by circles, while the arrows display the connections between the nodes and show the direction of information
 flow. Additionally, each arrow corresponds to a weight variable.  In this network, every node in one layer is connected to *all* nodes in the subsequent layer, making this a so-called *fully-connected* FFNN.
 
-```{figure} ./figs/fig-NeuralNet.png
+```{figure} ./figs/fig-NeuralNet.pdf
 :name: fig-NeuralNet-neuralnet
 
 A FFNN with two hidden layers. In addition to the weights associated with the connection arrows there can also be a bias weight connected with each of the active nodes in the hidden and output layers.
@@ -298,7 +298,7 @@ x^{(4)}_1 & x^{(4)}_2
 $$
 ```
 
-```{figure} ./figs/fig-NeuralNet-simple.png
+```{figure} ./figs/fig-NeuralNet-simple.pdf
 :name: fig-exercise-NeuralNet-simple-network
 
 A simple two-layer neural network.
