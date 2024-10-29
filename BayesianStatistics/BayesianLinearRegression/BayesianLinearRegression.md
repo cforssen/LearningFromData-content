@@ -180,11 +180,19 @@ $$ (eq:BayesianLinearRegression:likelihood_hessian)
 
 which can be understood as the curvature (Hessian) of the negative log-likelihood.
 
-```{exercise} Prove the Gaussian likelihood
+````{exercise} Prove the Gaussian likelihood
 :label: exercise:BayesianLinearRegression:likelihood_pars
 
 Prove Eq. {eq}`eq:BayesianLinearRegression:likelihood_pars`. 
+
+```{admonition} Hints
+:class: toggle
+
+1. Identify $\optpars$ as the position of the mode of the likelihood by inspecting the negative log-likelihood $L(\pars)$ and comparing with the derivation of the normal equation.
+2. Taylor expand $L(\pars)$ around $\optpars$. For this you need to argue (or show) that the gradient vector $\nabla_{\pars} L(\pars) = 0$ at $\pars=\optpars$, and show that the Hessian $\boldsymbol{H}$ (with elements $H_{ij} = \frac{\partial^2 L}{\partial\para_i\partial\para_j}$) is a constant matrix $\boldsymbol{H} = \frac{\dmat^T\dmat}{\sigmares^2}$.
+3. Compare with the Taylor expansion of a normal distribution $\mathcal{N}\left( \pars \vert \optpars, \covpars \right)$.
 ```
+````
 
 ### Posterior with a uniform prior
 
@@ -412,14 +420,6 @@ In all cases you should compare the Bayesian inference with the results from Ord
 ```{solution} exercise:BayesianLinearRegression:likelihood_pars
 :label: solution:BayesianLinearRegression:likelihood_pars
 :class: dropdown
-
-Hints:
-
-1. Identify $\optpars$ as the position of the mode of the likelihood by inspecting the negative log-likelihood $L(\pars)$ and comparing with the derivation of the normal equation.
-2. Taylor expand $L(\pars)$ around $\optpars$. For this you need to argue (or show) that the gradient vector $\nabla_{\pars} L(\pars) = 0$ at $\pars=\optpars$, and show that the Hessian $\boldsymbol{H}$ (with elements $H_{ij} = \frac{\partial^2 L}{\partial\para_i\partial\para_j}$) is a constant matrix $\boldsymbol{H} = \frac{\dmat^T\dmat}{\sigmares^2}$.
-3. Compare with the Taylor expansion of a normal distribution $\mathcal{N}\left( \pars \vert \optpars, \covpars \right)$.
-
-Full solution:
 
 - The likelihood can be written $\pdf{\data}{\pars,I} = \exp\left[ -L(\pars) \right]$, where we include information on the error distribution ($\sigmares$) in the conditional $I$. The negative log-likelihood, including the normalization factor, is
 

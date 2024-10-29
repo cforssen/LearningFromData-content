@@ -324,6 +324,26 @@ Consider a neural network with $p$ nodes in the input layer, one hidden layer wi
 - b) Show that the final output from the network also becomes linear in the inputs and relate the coefficients of this expression to the weights of the network.
 ```
 
+````{exercise} Expected signal
+:label: exercise:NeuralNet:expected-signal
+
+Consider a single node with $p$ input signals, including a bias weight when computing the activation $z$, and with a sigmoid activation function $f(z) = 1 / (1 + e^{-z})$. All weights are initialized as independent draws from a standard normal distribution (zero mean and unit variance). 
+
+Assume that you would initialize a large number of instances of this kind of node. Each one will have different weights. For each one, you propagate the same input signal $\inputs$ and measure the node's activation $z$ and output $y$.
+
+- a) How would the distribution $\p{z}$ of the measured activations look like?
+- b) How would the distribution $\p{y}$ of the measured outputs look like?
+- c) Study the form of $\p{y}$ for the two different limits $|\inputs| \ll 1$ (also with $w_0 \ll 1$) and $|\inputs| \gg 1$. 
+
+```{admonition} Hints
+:class: toggle
+
+  You can choose to do task c) numerically, which is rather straightforward given that you have solved a) and b), or you can study it analytically which is straightforward for the first case (small signals) but harder for the second one. 
+  
+  For the numerical solution you might have problems with computer precision for large signals. You could consider rewriting your probability distribution, or just consider $|\inputs| \approx 1$ is large enough to see the appearance of a bimodal distribution.
+```
+````
+
 ## Solutions
 
 ```{solution} exercise:NeuralNet:simple-network
@@ -360,15 +380,17 @@ $\boldsymbol{Z}^{1} = \boldsymbol{X} \boldsymbol{W}^{1} + \boldsymbol{b}^{1}$ is
 :label: solution:NeuralNet:linear-signal
 :class: dropdown
 
+In the following, superscripts denote the layer with $l=1$ the hidden layer and $l=2$ the output layer. Correspondingly, propagating signals are row vectors such that $w^l_{ij}$ is the weight $i$ of node $j$ in layer $l$ (i.e., it multiplies incoming signal $i$, $i=0$ corresponding to the bias).
+
 - a) The output of node 1: $y^1(z^1) = \frac{1}{1+1-z^1+\mathcal{O}((z^1)^2)} = \frac{1}{2} \left( 1 + \frac{z^1}{2} + \mathcal{O}((z^1)^2) \right)$.
 
-  With $z^1 = w^1_{10} + \sum_{i=1}^p w^1_{1i} x_i$ we find
+  With $z^1 = w^1_{01} + \sum_{i=1}^p w^1_{i1} x_i$ we find
   
   $$
-  y^1 = \frac{1}{2} + \frac{1}{4} \left( w^1_{10} + \sum_{i=1}^p w^1_{1i} x_i \right).
+  y^1 = \frac{1}{2} + \frac{1}{4} \left( w^1_{01} + \sum_{i=1}^p w^1_{i1} x_i \right).
   $$
   
-- b) The final output is $y = w^2_{10} + \sum_{l=1}^L w^2_{1l} y^1_l$. The signals $y^1_l$ from the hidden layer are given by (a). We arrive at the linear signal
+- b) The final output is $y = w^2_{01} + \sum_{l=1}^L w^2_{l1} y^1_l$. The signals $y^1_l$ from the hidden layer are given by (a). We arrive at the linear signal
 
   $$
   y = k_0 + k_1 x_1 + k_2 x_2 + \ldots + k_L x_L
@@ -377,7 +399,34 @@ $\boldsymbol{Z}^{1} = \boldsymbol{X} \boldsymbol{W}^{1} + \boldsymbol{b}^{1}$ is
   with 
 
   $$
-  k_0 &= \frac{L}{2} + w^2_{10} + \frac{1}{4} \sum_{l=1}^L w^1_{l0}, \\
-  k_i &= \frac{1}{4} \sum_{l=1}^L w^2_{1l} w^1_{li}.
+  k_0 &= w^2_{01} + \frac{1}{4} \sum_{l=1}^L w^2_{l1} (2 + w^1_{0l}), \\
+  k_i &= \frac{1}{4} \sum_{l=1}^L w^2_{l1} w^1_{il}.
   $$
+```
+
+```{solution} exercise:NeuralNet:expected-signal
+:label: solution:NeuralNet:expected-signal
+:class: dropdown
+
+The input is $\inputs = (\inputt_1, \inputt_2, \ldots, \inputt_p)$ and the node's weights are $(w_0, w_1, w_2, \ldots, w_p)$ with $w_0$ the bias.
+
+- a) The activation $z$ will be normally distributed
+
+  $$
+  \p{z} = \mathcal{N}(\mu_z, \sigma_z^2),
+  $$
+  
+  with mean $\mu_z = 0$ and variance $\sigma_z^2 = 1 + \left| \inputs \right|^2$.
+  
+- b) The distribution of the output can be obtained via a transformation $y = 1 / (1 + e^{-z})$, or rather $z = \ln (y / (1-y))$. One finds
+
+  $$
+  p_Y(y) &= p_Z (z(y)) \left| \frac{d z}{z y} \right| \\
+  &= \frac{1}{\sqrt{2\pi\sigma_z^2}} \frac{1}{y(1-y)} \exp \left[ -\frac{\left( \ln (y / (1-y)) \right)^2}{2 \sigma_z^2} \right]
+  $$
+  
+- c) For small signals the activation will be small and the response will be approximately linear. This means that the final output will be a linear combination of normal-distributed weights, which is another normal distribution. The mode, however, will be at $y=0.5$.
+
+  For very large signals you will find an output distribution that is sharply peaked at $y=0$ and $y=1$. That means that you should expect the node to be either very quiet or very noisy, but hardly anything in between (the expectation value will still be $\expect{y} = 0.5$, but $\std{y} \to 0.5$.)
+
 ```
