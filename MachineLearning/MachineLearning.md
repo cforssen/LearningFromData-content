@@ -70,20 +70,24 @@ The approaches to machine learning are many, but are often split into two main c
 
 Another way to categorize machine learning is to consider the desired output. What kind of inference are you performing with your data? Is the aim to classify a result into categories, to predict a continuous response variable, or to simply observe patterns within the data? Let’s briefly introduce different types of tasks:
 
+```{admonition} Regression algorithms
+  aims to find a functional relationship between input and output (predictor and response). The goal is often to construct a function that maps input data to continuous output values. These algorithms also require labeled output.
+  ```
+
 ```{admonition} Classification algorithms
-  are used to predict whether the outputs of a data set can be split into separate classes; binary or multiple. The outputs are discrete and represent target classes. Classification algorithms undergo supervised training, which means they require labeled true output data. 
+  are used to predict splitting of a data set into separate classes; binary or multiple. The outputs are discrete and represent target classes. Classification algorithms often undergo supervised training, which means they require labeled true output data. 
   ```  
   
 ```{admonition} Clustering algorithms
-  can also be used for classification or simply to observe data patterns. By observing how the data is arranged within the feature space, clustering algorithms can utilize physical separation to create clusters. As such, some algorithms of this class don’t require output labels, making them unsupervised algorithms.
+  can also be used for classification or simply to observe data patterns. By observing structures of data within the feature space, clustering algorithms aim to identify clusters. Some algorithms of this type don’t require output labels, making them unsupervised algorithms.
   ```
 
 ```{admonition} Dimensionality reduction algorithms
-  focuses on decreasing the number of features from your data set, identifying the most important predictor variables, and preventing your models from overfitting. They are also unsupervised.
+  focuses on decreasing the number of features from your data set, identifying the most important predictor variables and preventing your models from overfitting. They are usually unsupervised.
   ```
 
-```{admonition} Regression algorithms
-  aims to find a functional relationship between input and output (predictor and response). The goal is often to construct a function that maps input data to continuous output values. These algorithms also require labeled output.
+```{admonition} Generative models
+  aims to find patterns and structures within a data set and turn these into a generative model that that can be used to create new data.
   ```
 
 Sometimes, the data collection process automatically provides the labels used in supervised learning, but in some cases the labeling is in itself a painstaking task that involves manual labor.
