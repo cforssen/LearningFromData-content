@@ -363,10 +363,10 @@ The chain $Y$ is called the *time-reversal* of $X$, and we say that $X$ is *reve
 Considering a reversible chain with transition density $T$ and stationary distribution $\boldsymbol{\pi}$, the property of reversibility can be formulated as a **detailed balance**
 
 $$
-\pi_k T(k,j) = \pi_j T(j,k),
+\pi_i T(i,j) = \pi_j T(j,i),
 $$ (eq:MarkovChains:detailed-balance)
 
-for all $j,k$ in $S$. 
+for all $j,i$ in $S$. 
 
 ```{exercise} Reversibility
 :label: exercise:MarkovChains:reversibility
@@ -440,6 +440,74 @@ Consider {numref}`fig-example-ReversibleMarkovProcessExample-cprob`.
 - Is this a reversible Markov chain?
 - Can you guess what is the equilibrium distribution?
 ```
+
+
+## Metropolis design
+
+A Markov chain that reaches an equilibrium with a stationary distribution $\pi$ will have all subsequent outcomes distributed according to $\pi$. Here we consider discrete chains with a discrete sample space.
+
+`````{admonition} Sampling a distribution
+:class: tip
+Consider a sequence of outcomes $(i_0, i_1, i_2, \ldots)$ from a stationary Markov chain. 
+1. The first outcome, $i_0$, is in practice a sample from the initial probability distribution $\pi^{(0)}$. Note that $\pi^{(0)}_i = \prob_{X_0}(i)$.
+2. The second outcome, $i_1$, is a sample from $\pi^{(1)} = \pi^{(0)} T$. In practice, since we have the first outcome $i_0$, we obtain this second outcome as a sample from the conditional distribution for $X_1$ given $X_0$, i.e., a distribution with elements $\prob_{X_1 \vert X_0}(i \vert i_0) = T(i_0, i)$.
+3. Continuing the process of drawing samples from conditional distributions we find that the $n$:th outcome $i_n$ is a sample from $\pi^{(n)} \pi^{(0)} T^n$, but in practice we obtain it as a draw from $\prob_{X_n \vert X_{n-1}}(i \vert i_{n-1}) = T(i_{n-1}, i)$.
+
+Dismissing the first $n$ outcomes, for which we have not yet reached equilibrium, we have the sequence $(i_{n+1}, i_{n+2}, \ldots)$. These are, respectively, samples from $\pi^{(n+1)}, \pi^{(n+2)}, \ldots$. Assuming that the Markov chain has reached equilibrium, then all of these distributions are in fact the same. Therefore, our sequence of outcomes after equilibration are samples from the *same* distribution $\pi$.
+`````
+
+Now we would like to *design* a stationary Markov chain, via its transition matrix $T$, such that it has a desired probability distribution $\pi$ as its limiting distribution. Let us first recapitulate some important facts concerning Markov chains. 
+
+1. A stationary Markov chain is guaranteed to have a limiting distribution when the transition matrix $T$ fulfills certain conditions (irreducibility, etc).
+2. A limiting distribution $\pi$ is also a stationary distribution: $\pi = \pi T$.
+3. A distribution $\pi$ that fulfills detailed balance, $\pi_i T(i,j) = \pi_j T(j,i)$, is guaranteed to be a stationary distribution.
+
+We utilize these facts in the so called Metropolis design of a Markov chain.
+
+````{prf:remark} The Metropolis design for obtaining a discrete limiting distribution
+:label: remark:MCMC:Metropolis-discrete
+
+We want to design a stationary Markov chain that has a desired distribution $\pi$ as its limiting distribution. To achieve this, we construct the transition matrix in a product form. Its non-diagonal elements are
+
+\begin{equation}
+T(i,j) = A(i,j) S(i,j), \quad \text{for } i \neq j,
+\end{equation}
+
+where $S$ is a (discrete) step proposal matrix and $A$ contains acceptance probabilities. Formally, the elements of these matrices should be interpreted as probabilities
+
+\begin{align}
+S(i,j) &= \cprob{\text{proposing next position } j}{\text{current position is } i}, \\
+A(i,j) &= \cprob{\text{accepting new position } j}{\text{current position is } i},
+\end{align}
+
+where we think of outcomes of subsequent random variables as positions in the sample space. Note how the probability of a transition from $i$ to $j$, given by $T(i,j)$, is then the product of these two independent (proposal and acceptance) probabilities.
+
+Constraining $T$ to fulfill detailed balance {eq}`eq:MarkovChains:detailed-balance` we can guarantee that $\pi$ is a stationary distribution. That is, we require
+
+\begin{equation}
+\pi_i S(i,j) A(i,j) = \pi_j S(j,i) A(j,i).
+\end{equation}
+
+This condition is fulfilled for any stochastic matrix $S$ (impying non-negative entries and row sums equal to one) if one sets the acceptance probability
+
+\begin{equation}
+A(i,j) = \min\left(1, \frac{\pi_j}{\pi_i}\frac{S(j,i)}{S(i,j)} \right),
+\end{equation}
+
+where the second argument to the min-function is known as the *Metropolis ratio*.
+
+Finally, the diagonal entries of the transition matrix are
+
+\begin{equation}
+T(i,i) = S(i,i) + \sum_{j \neq i} S(i,j) \left( 1 - A(i,j)\right),
+\end{equation}
+
+which can be understood by the fact that transitions to the same position can be triggered by a proposed move (the first term; note that $A(i,i)=1$), or by a non-accepted, proposed move to any other position (the sum in the second term). 
+
+Different choices of $S$ can be considered. As long as the chain is irreducible, positively recurrent, and aperiodic then it is guaranteed that $\pi$ is a limiting distribution.
+
+See {numref}`exercise:MCMC:discrete-metropolis` for an explicit example.
+````
 
 
 ## Exercises

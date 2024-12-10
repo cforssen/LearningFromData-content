@@ -303,38 +303,6 @@ The basic structure of the Metropolis (and Metropolis-Hastings) algorithm is the
 * It enabled Bayesian methods to become feasible.
 * Note, however, that nowadays there are much more sophisticated samplers than the original Metropolis one.
 
-````{prf:remark} The Metropolis algorithm for a discrete limiting distribution
-:label: remark:MCMC:Metropolis-discrete
-
-We have considered Markov chains with continuous state spaces since this is the situation of most interest in physics. In this situation we just use the transition density constructed using the Metropolis(-Hastings) algorithm to draw new samples in the Markov chain. However, this algorithm can also be used to sample from a limiting distribution of discrete outcomes in which case we can write down the full transition matrix.
-
-Considering detailed balance {eq}`eq:MarkovChains:detailed-balance` we construct the transition matrix with non-diagonal elements
-
-\begin{equation}
-T(i,j) = A(i,j) S(i,j), \quad \text{for } i \neq j,
-\end{equation}
-
-incorporating an acceptance probability
-
-\begin{equation}
-A(i,j) = \min\left(1, \frac{\pi_j}{\pi_i}\frac{S(j,i)}{S(i,j)} \right),
-\end{equation}
-
-and a (discrete) step proposal matrix $S(i,j)$. Different choices of $S$ can be considered as long as it is a stochastic matrix impying non-negative entries and row sums equal to one.
-
-The diagonal entries of the transition matrix are
-
-\begin{equation}
-T(i,i) = S(i,i) + \sum_{j \neq i} S(i,j) \left( 1 - A(i,j)\right),
-\end{equation}
-
-which can be understood by the fact that transitions to the same state can be triggered by a proposed move there (the first term), or by a non-accepted proposed move to any other state (the sum in the second term). 
-
-See {numref}`exercise:MCMC:discrete-metropolis` for an explicit example.
-
-````
-
-
 ## State-of-the-art MCMC implementations
 
 Here is an (incomplete) list of state-of-the-art MCMC implementations and packages that are available in Python (and often other languages)
