@@ -394,14 +394,12 @@ This family of transition densities will be discussed in more detail in the next
 ````
 
 ```{glue:figure} ReversibleMarkovProcessExample_runs_fig
-:scale: 75
 :name: "fig-example-ReversibleMarkovProcessExample-runs"
 
 Four chains produced with the reversible Markov chain.
 ```
 
 ```{glue:figure} ReversibleMarkovProcessExample_cprob_fig
-:scale: 75
 :name: "fig-example-ReversibleMarkovProcessExample-cprob"
 
 Conditional probabilities for the reversible Markov chain. See the caption of {numref}`fig:X2givenX0` for explanations how to interpret these plots.
