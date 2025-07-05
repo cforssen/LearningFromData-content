@@ -49,7 +49,7 @@ Following [](sec:LinearModels) we will apply the linear machine learning model
 \MLmodel{\weights \, ; \, \inputs_i} = \inputs_i \cdot \weights,
 \end{equation}
 
-where $\weights$ is a $p \times 1$ column vector of model parameters. These are known as weights in this context. We might also simplify the notation and write $MLoutput_i = \MLmodel{\inputs_i}$. 
+where $\weights$ is a $p \times 1$ column vector of model parameters. These are known as weights in this context. We might also simplify the notation and write $\MLoutput_i = \MLmodel{\inputs_i}$. 
 
 A machine learning regression analysis aims at finding the model parameters $\weights$ such that a selected cost function is minimized. This optimization step  is the learning part of the model. The cost function is supposed to measure the performance of the model
 
@@ -96,20 +96,22 @@ and the $R2$ score, also known as *coefficient of determination*
 
 where $\bar{y} = \frac{1}{N} \sum_{i=1}^N \MLoutput_{i}$ is the mean of the model predictions.
 
+For classification tasks one might also use the misclassification cost function (see {numref}`exercise:MLexamples:misclassification-cost-function`) or cross entropy. Misclassification is the relative number of misclassified instances in a data set and is therefore the same as $1-\alpha$, where $\alpha$ is the accuracy.
+
 ````{prf:example} Binary classification
 :label: example:MLexamples:binary-classification
 
-Figure {numref}`fig:MLexamples:binary_classification_data` shows a scatterplot of training data that is a function of two predictor variables $\inputs_i = (x_1, x_2)_i$. The output $y$ is a class that can be either Blue or Red. 
+Figure {numref}`fig-example-MLexamples-binary_classification_data` shows a scatterplot of training data that is a function of two predictor variables $\inputs_i = (x_1, x_2)_i$. The output $y$ is a class that can be either Blue or Red. 
 
 The procedure and code that generate this data is included in the hidden code cell below. However, here we assume that we don't know the underlying data generating process. Our aim is to construct machine learning algorithms that can be trained on the collected data and make predictions for future data. The task can then be expressed as: Develop a computer program that can learn from labeled data $\trainingdata = \{ \inputs_i, \output_i\}_{i=1}^N$ and make a prediction of the class $\testoutput$ that a new input $\testinputs$ belongs to.
 
+````
+
 ```{glue:figure} binary_classification_data_fig
-:name: "fig:MLexamples:binary_classification_data"
+:name: fig-example-MLexamples-binary_classification_data
 
 Labeled training data for a binary classification problem.
 ```
-
-````
 
 ```{code-cell} python3
 :tags: [hide-cell]
@@ -160,7 +162,7 @@ train_data = generate_binaryclass_data(num_data_per_class)
 np.random.shuffle(train_data)
 
 
-fig_train_data,ax = plt.subplots(1,1)
+fig_train_data,ax = plt.subplots(1,1, figsize=(4,4))
 for iclass, color in enumerate(classes):
     x_data = train_data[train_data[:,2]==iclass,:2]
     ax.scatter(x_data[:,0],x_data[:,1],color=color)
@@ -180,6 +182,13 @@ $$
 $$
 
 We again include a bias feature in the design matrix $\boldsymbol{X}$ such that $\weights = [\weight_0, \weight_1, \weight_2]^T$. We note that each model output $z$ is a continuous variable. How could this be used for the task of a binary classifier?
+
+```{glue:figure} fig_linear_classifier_plane
+:name: "fig:MLexamples:fig_linear_classifier_plane"
+
+This plane is the linear regression (ordinary least squares) fit of a model $z = \weight_0 + \weight_1 \inputt_1 + \weight_2 \inputt_2$ to the training data of {numref}`fig-example-MLexamples-binary_classification_data`. For visualization we indicate the line where it crosses the $z=0$ plane and use red (blue) color to emphasize regions with positive (negative) $z$-value.
+```
+
 
 ### The perceptron classifier
 
@@ -220,7 +229,7 @@ where the so called *activation* $z = \inputs \cdot \weights$.
 ```{glue:figure} fig_linear_classifier
 :name: "fig:MLexamples:fig_linear_classifier"
 
-Results of the hard (perceptron) and soft (sigmoid) linear classifier on the data from {prf:ref}`example:MLexamples:binary-classification`. The model predictions for the hard classifier are represented by the red and blue regions on either side of the sharp decision boundary (left panel). For the soft classifier (right panel) the colors represent the model prediction for the probability of belonging to the red class. The black line marks the decision boundary where the model gives no preference for either class $\prob(\MLtestoutput=\text{Red}) = 0.5$.
+Results of the hard (perceptron) and soft (sigmoid) linear classifier on the data from {prf:ref}`example:MLexamples:binary-classification`. The model predictions for the hard classifier are represented by the red and blue regions on either side of the sharp decision boundary (left panel). For the soft classifier (right panel) the colors represent the model prediction for the probability of belonging to the red class. The black line marks the decision boundary where the model gives no preference for either class $\prob(\MLtestoutput=\text{Red}) = 0.5$. See also {numref}`fig:MLexamples:fig_linear_classifier_plane` for the corresponding activation $z$ from the linear regression model.
 ```
 
 
@@ -315,11 +324,11 @@ x1x2_grid = np.dstack((x1, x2))
 
 # predictions of the linear classifier on the grid
 # liner model output
-ytilde_grid = ols_theta[0] + ols_theta[1]*x1x2_grid[:,:,0] + ols_theta[2]*x1x2_grid[:,:,1]
+z_grid = ols_theta[0] + ols_theta[1]*x1x2_grid[:,:,0] + ols_theta[2]*x1x2_grid[:,:,1]
 # perceptron (hard classifier) prediction
-yhat_hard_grid = np.sign(ytilde_grid)
+yhat_hard_grid = np.sign(z_grid)
 # sigmoid (soft classifier) prediction
-yhat_soft_grid = 1/(1+np.exp(-ytilde_grid))
+yhat_soft_grid = 1/(1+np.exp(-z_grid))
 
 # Final results are transformed back to original coordinates
 x1_orig = sample_std[0]*x1 + sample_mean[0]
@@ -347,6 +356,38 @@ ax.set_title('soft linear classifier');
 
 glue("fig_linear_classifier", fig_linear_classifier, display=False);
 ```
+
+For visualization we also make a 3D plot of the surface $z=z(x_1,x_2) = w_0 + w_1 x_1 + w_2 x_2$ that results from the linear regression. This is the plane that minimizes the sum of squared distances to the data.
+
+```{code-cell} python3
+from mpl_toolkits.mplot3d import axes3d
+
+fig_linear_classifier_plane = plt.figure()
+ax = fig_linear_classifier_plane.add_subplot(projection='3d')
+
+# Plot the 3D surface
+ax.plot_surface(x1_orig, x2_orig, z_grid, edgecolor='royalblue', lw=0.5, rstride=8, cstride=8, alpha=0.5, cmap=plt.cm.coolwarm)
+
+# Plot the x1x2 surface
+ax.plot_surface(x1_orig, x2_orig, np.zeros_like(x1_orig), edgecolor='grey', lw=0.5, rstride=8, cstride=8, alpha=0.05)
+
+for iclass, color in enumerate(classes):
+    x_data = train_data[train_data[:,2]==iclass,:2]
+    ax.scatter(x_data[:,0],x_data[:,1], zs=iclass, zdir='z',color=color)
+
+ax.contour(x1_orig, x2_orig, z_grid,levels=[0.0],)
+
+ax.set_xlabel(r'$x_1$')
+ax.set_ylabel(r'$x_2$')
+ax.set_zlabel(r'model: $z$, data: $y$')
+
+ax.set_zlim(-0.75, 1.75)
+
+ax.view_init(elev=15., azim=-75, roll=0)
+fig_linear_classifier_plane.tight_layout()
+glue("fig_linear_classifier_plane", fig_linear_classifier_plane, display=False);
+```
+
 
 ### $k$NN classifier
 
@@ -418,7 +459,7 @@ $$ (eq:MLexamples:misclassification)
 where each term evaluates to zero if the classification is correct. 
 
 - What would be different in our training when using such a cost function?
-- Do you expect the parameters to be (A) the same, (B) similar, (C) very different compared to the model where the mean-squared error is used to define the cost function?
+- Do you expect the parameters to be A) the same, B) similar, C) very different compared to the model where the mean-squared error is used to define the cost function?
 ```
 
 ```{exercise} Validation errors

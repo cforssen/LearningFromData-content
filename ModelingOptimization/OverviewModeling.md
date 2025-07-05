@@ -26,7 +26,20 @@ kernelspec:
 
 ## Models in science
 
-In general, modeling deals with the description of a **dependent** variable(s) $\outputs$, for which we have collected data, as a function of some **independent** variable(s) $\inputs$. The first variable is also often called the **response**, or the **outcome** variable while the second one can be called the **predictor** variable, or the **explanatory** variable. Both dependent and independent variables can be of various types: real-valued, integers or categorical, defined on infinite or discrete domains, etc. Note also that each of these might be a vector of variables, meaning that there could be more than one dependent variable and more than one independent variable. We therefore denoted these variables as vectors using a bold font. 
+In general, modeling deals with the description of **dependent** variable(s) $\outputs$ as a function of some **independent** variable(s) $\inputs$. The first variable is also often called the **response**, or the **outcome** variable while the second one can be called the **predictor** variable, or the **explanatory** variable. Both dependent and independent variables can be of various types: real-valued, integers or categorical, defined on infinite or discrete domains, etc. Note also that each of these might be a vector of variables, meaning that there could be more than one dependent variable and more than one independent variable. We therefore denoted these variables as vectors using a bold font. The general act of finding a relationship between dependent and independent variables is known as *regression analysis* and usually involves a set of collected data.
+
+```{prf:definition} Regression analysis
+:label: definition:OverviewModeling:regression-analysis
+
+Regression analysis is the process of estimating a relationship between one or more dependent variables and one or more independent variables.
+
+[Merriam-Webster](https://www.merriam-webster.com/dictionary/regression): 
+*"A functional relationship between two or more correlated variables that is often empirically determined from data and is used especially to predict values of one variable when given values of the others.*
+
+**History**: The earliest form of regression was the method of least squares, which was published by Legendre in 1805 and by Gauss in 1809. Legendre and Gauss both applied the method to the problem of using astronomical observations for determining the orbits of bodies (mostly comets) about the Sun.
+
+The term "regression" was coined by Francis Galton in the 19th century to describe a biological phenomenon. The phenomenon was that the heights of descendants of tall ancestors tend to regress down towards a normal average (a phenomenon also known as regression toward the mean).
+```
 
 For simplicity in this chapter we limit ourselves to the case where both input ($\inputt$) and output ($\output$) are univariate (one input and one output) and real-valued such that
 
@@ -34,21 +47,30 @@ $$
 \output \approx \model{\pars}{\inputt}.
 $$ (eq:OverviewModeling:modeling-simple)
 
-As indicated in this relation, a model will typically include some model parameters ($\pars$). These might already be set, or they might need to be inferred from some model calibration data $\data$. A large fraction of our discussions will revolve around the task of determining model parameters. We might refer to this endeavour as *model calibration*. It is an example of a *scientific inference* problem. 
+As indicated in this relation, a model will typically include some model parameters ($\pars$). These might already be known, or they might need to be inferred from a set of model calibration data $\data$. A large fraction of our discussions will revolve around the task of determining model parameters. We might refer to this endeavour as *model calibration* or *parameter estimation*. It is an example of a *scientific inference* problem. 
 
-Unfortunately, model calibration is a challenging task that is often performed with a lack of scientific rigour. In future chapters we will explore both the *optimization approach*---which is very common and is absolutely dominating in the construction of machine-learning models---and the scientifically more relevant process of *inductive inference* in particular using *Bayesian methods*. The Bayesian perspective is very useful as it allows a more formal definition of the process of learning that we can apply also in general machine-learning contexts.
+Unfortunately, model calibration is a challenging task that is often performed with a lack of scientific rigour. In future chapters we will explore both the *optimization approach*---which is very common and is absolutely dominating in the construction of machine-learning models---and the scientifically more relevant process of *statistical inference*. For the latter we will in particular use *Bayesian methods*. The Bayesian perspective is very useful as it allows a more formal definition of the process of learning that we can apply also in general machine-learning contexts.
 
-Note that Eq. {eq}`eq:OverviewModeling:modeling-simple` indicates an approximate relationship. Scientific modeling usually relies on a number of approximations. The model should therefore not be expected to provide an exact representation of reality. The missing piece can be referred to as the *model discrepancy*. In addition, reality is observed via experiments that are associated with *experimental errors*. The proper way of handling these uncertainties is via random variables and probability distributions. We will return to this in the **Bayesian inference** part, in particular starting from {numref}`sec:DataModelsPredictions`: {ref}`sec:DataModelsPredictions`. The statistical modeling of the relationship between dependent and independent variables is known as *regression analysis*.
+```{prf:definition} Statistical inference
+:label: definition:OverviewModeling:statistical-inference
 
-We will mainly consider *deterministic models* that uniquely maps inputs to outputs. Although the scientific inference eventually relies on stochastic modelling of error terms, the form of the model $\model{\pars}{\inputt}$ is still a deterministic one. In contrast, some processes are better described by *stochastic models*. We will make some acquaintance with this kind of modeling in the **Stochastic processes** part.
+Statistical inference is the quantitative process used for drawing conclusions about the nature of some system on the basis of data and models subject to random variation. Probability is the quantitative metric used to measure the strength of statistical inference.
+
+[Merriam-Webster](https://www.merriam-webster.com/dictionary/inference): 
+*"The act of passing from one proposition, statement, or judgment considered as true to another whose truth is believed to follow from that of the former."* (this definition is for the root term "inference")
+```
+
+Note that Eq. {eq}`eq:OverviewModeling:modeling-simple` indicates an approximate relationship. Scientific modeling usually relies on a number of approximations. The model should therefore not be expected to provide an exact representation of reality. The missing piece can be referred to as the *model discrepancy*. In addition, reality is observed via experiments that are associated with *experimental errors*. The proper way of handling these uncertainties is via random variables and associated probability distributions. We will return to this approach in the **Bayesian inference** part, in particular starting from {numref}`sec:DataModelsPredictions`: {ref}`sec:DataModelsPredictions`. 
+
+We will mainly consider *deterministic models* that uniquely maps inputs to outputs. Despite the fact that statistical inference relies on stochastic modelling of error terms, the form of the model $\model{\pars}{\inputt}$ is still a deterministic one. However, some processes are better described by *stochastic models*. We will make some acquaintance with this kind of modeling in the **Stochastic processes** part.
 
 ## Parametric versus non-parametric models
 
-Most scientific models contain parameters and are therefore known as *parametric models*. Moreover, in physics these parameters might be constrained by theoretical hypotheses and by previous observations. The values of the parameters might be interesting in themselves which broades the scope of the modeling from just describing a relationship to actually extracting physics knowledge. 
+Most scientific models contain parameters and are therefore known as *parametric models*. In physics these parameters might be constrained by theoretical hypotheses and by previous observations of related systems. Moreover, the parameters values might be interesting by themselves which broadens the scope of modeling from just describing a relationship to actually extracting physics knowledge. 
 
-We should not underestimate the power of having physics insights when creating a model. Such insights will help to make informed decisions on relevant modeling approximations, which in turn helps to quantify the size of the model discrepancy. In fact, one could claim that true predictive power rests in the ability to make reliable statements on the precision (uncertainty) of a prediction.
+We should not underestimate the power of physics insights when creating a model. Such insights help in making informed decisions on relevant modeling approximations, which in turn helps in quantifying the size of model discrepancies. In fact, one could claim that true predictive power rests in the ability to make reliable statements on the precision (uncertainty) of a prediction.
 
-In contrast, one could also strive to learn a relationship without having detailed modeling insights. For this purpose one can construct families of models that are characterized by large flexibility (allowing to model many different and complicated relationships) and set up an algorithms that adjusts the black-box model to a specific purpose. This approach could in general be labeled as machine learning and has proven to be very powerful in many different contexts. Very often, the learning process is performed with a large amount of training data but it might also be possible to achieve without such "supervision". The machine-learning models and learning algorithms usually involve various kinds of parameters, but since these are not meaningful in themselves we can refer to the models as *non-parametric*. We will encounter this approach in the **Machine learning** part of these lecture notes.
+It is also possible to learn a relationship without having detailed modeling insights. For this purpose one can consider very general models characterized by large flexibility (allowing to model different relationships) and set up a learning algorithm that adjusts the model to fit a specific purpose. This approach could in general be labeled as machine learning and has proven to be very powerful in many different contexts. Very often, the learning process is performed with a large amount of labeled training data but it might also be possible to achieve without such "supervision". The machine-learning models and learning algorithms usually involve various kinds of parameters, but since these are not meaningful in themselves we can refer to the models as *non-parametric*. We will encounter this approach in the **Machine learning** part of these lecture notes.
 
 ## Linear versus non-linear models
 
@@ -65,7 +87,7 @@ $$
 \model{\pars}{\inputt} = \para_0 + \para_1 \inputt + \para_2 \inputt^2.
 $$
 
-Note that the parameters enter linearly although the dependence on the independent variable is quadratic.
+Note that the parameters $\pars$ enter linearly although the dependence on $\inputt$ (which is the independent variable) is quadratic.
 
 Here is a second example that corresponds to a truncated trigonometric series
 
@@ -73,7 +95,7 @@ $$
 \model{\pars}{\inputt} = A_0 + \sum_{n=1}^N A_n \sin(n\inputt) + B_n \cos(n\inputt),
 $$ 
 
-where the model parameters $\pars = \{ A_0, A_1, \ldots, A_N, B_1, \ldots, B_N\}$.
+where the model parameters $\pars = \{ A_0, A_1, \ldots, A_N, B_1, \ldots, B_N\}$ again enter linearly.
 ```
 
 ```{prf:example} Non-linear models
@@ -91,7 +113,7 @@ with three parameters.
 
 ## Regression analysis: optimization versus inference
 
-Assuming that we have access to $N_d$ instances of data with values for the independent variable $\{ \inputt_1, \inputt_2, \ldots \inputt_{N_d} \}$ and the corresponding responses $\{ \output_1, \output_2, \ldots \output_{N_d} \}$. Let us define a *cost function* $C(\pars)$ that quantifies how well our model $\model{\pars}{\inputt}$ reproduces the training data,
+Assuming that we have access to $N_d$ instances of data corresponding to measured responses $\{ \output_1, \output_2, \ldots \output_{N_d} \}$ and the corresponding values for the independent variable $\{ \inputt_1, \inputt_2, \ldots \inputt_{N_d} \}$. Let us define a *cost function* $C(\pars)$ that quantifies how well our model $\model{\pars}{\inputt}$ reproduces the training data,
 
 \begin{equation}
 C(\pars) = \sum_{i=1}^{N_d} \frac{(\output_i - \model{\pars}{\inputt_i})^2}{\sigma_i^2},

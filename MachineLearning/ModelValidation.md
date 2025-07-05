@@ -148,8 +148,6 @@ Here we have defined the norm-1 as
 
 Lasso stands for least absolute shrinkage and selection operator.
 
-<!-- <![<p><em>Ridge regularization with different penalty parameters $\lambda$ for different polynomial models of our noisy data set. <div id="fig-ridge_reg"></div></em></p>](./figs/ridge_reg.png) -->
-
 ```{figure} ./figs/ridge_reg.png
 :name: fig-ridge_reg
 

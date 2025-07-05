@@ -124,23 +124,23 @@ We initialize the chain with a uniform random variable $p_{X_0}(x_0) = \mathcal{
 p_{ X_{n+1} \vert X_n} \left( x_j \vert x_i \right) = \mathcal{U}\left( \left[ \frac{x_i}{2} ,\frac{x_i+1}{2} \right] \right).
 \end{equation}
 
-The simulation below includes againt two relevant visualizations:
+The simulations in {numref}`fig-example-MarkovProcessExample_runs_fig` and {numref}`fig-example-MarkovProcessExample_corner_fig` includes two relevant visualizations:
 * Plots of the first variables from a few runs.
 * A corner plot of bivariate and univariate marginal distributions.
 
+````
+
 ```{glue:figure} MarkovProcessExample_runs_fig
-:name: "fig:MarkovProcessExample_runs_fig"
+:name: fig-example-MarkovProcessExample_runs_fig
 
 First 50 variables in four realisations of the chain.
 ```
 
 ```{glue:figure} MarkovProcessExample_corner_fig
-:name: "fig:MarkovProcessExample_corner_fig"
+:name: fig-example-MarkovProcessExample_corner_fig
 
 Joint bivariate and univariate probability distributions. The statistics to produce these plots were gathered from 20,000 realisations of the Markov chains.
 ```
-
-````
 
 ```{code-cell} python3
 import numpy as np
@@ -197,21 +197,17 @@ We will now explore the long-time evolution of a Markov chain. We will, for simp
 First, we note that even the Markov process with its very short memory (dependence on just the previous value) will maintain an imprint of earlier positions. This imprint, however, will be finite. Let us explore the first few steps pf the chain. The conditional probability of being in state $k$ at position 2 given that we started in position $i$ at $t=0$ can be obtained using the product rule {eq}`eq:Statistics:product-rule`
 
 $$
-\begin{align*}
 \cprob{X_{2}=k}{X_{0}=i} &= \sum_j  \cprob{X_{2}=k, X_{1}=j}{X_{0}=i} \\
 &= \sum_j  \cprob{X_{2}=k}{X_{0}=i, X_{1}=j} \cprob{X_{1}=j}{X_{0}=i} \\
-&= \sum_j  \cprob{X_{2}=k}{X_{1}=j} \cprob{X_{1}=j}{X_{0}=i},
-\end{align*} 
+&= \sum_j  \cprob{X_{2}=k}{X_{1}=j} \cprob{X_{1}=j}{X_{0}=i} ,
 $$ (eq:MarkovChains:PX2|X0)
 
 where we have employed the Markov property in the last equality. We can now compare this with the probability of being in state $k$ at position 2 without any condition on the starting position
 
 $$
-\begin{align*}
 \prob \left( X_{2}=k \right) &= \sum_{i,j}  \prob \left( X_{2}=k, X_{1}=j, X_{0}=i \right) \\
 &= \sum_{i,j}  \cprob{X_{2}=k}{X_{0}=i, X_{1}=j} \prob \left( X_{1}=j, X_{0}=i \right) \\
 &= \sum_{j}  \cprob{X_{2}=k}{X_{1}=j} \prob \left( X_{1}=j \right),
-\end{align*} 
 $$ (eq:MarkovChains:PX2)
 
 where we have again used the product rule and the Markov property. In the final equality we also used the marginalization of the joint probability. The comparison of Eqs. {eq}`eq:MarkovChains:PX2|X0` and {eq}`eq:MarkovChains:PX2` reveals that the two probabilites are not equal in general. They would be equal if $\cprob{X_{1}=j}{X_{0}=i} = \prob \left( X_{1}=j \right)$, which is only fulfilled if the positions are in fact completely independent.
@@ -219,9 +215,9 @@ where we have again used the product rule and the Markov property. In the final 
 ```{exercise} Remnant memory
 :label: exercise:MarkovChains:memory
 
-Can you visually verify the remnant memory by identifying the distributions {eq}`eq:MarkovChains:PX2|X0` and {eq}`eq:MarkovChains:PX2` in {numref}`fig:MarkovProcessExample_corner_fig` of  {prf:ref}`example:simple-markov-process`?
+Can you visually verify the remnant memory by identifying the distributions {eq}`eq:MarkovChains:PX2|X0` and {eq}`eq:MarkovChains:PX2` in {numref}`fig-example-MarkovProcessExample_corner_fig` of  {prf:ref}`example:simple-markov-process`?
 
-Hint: The conditional distribution is actually not shown in {numref}`fig:MarkovProcessExample_corner_fig` but is easy to obtain using the simple initial distribution and Eq. {eq}`eq:Statistics:conditional-probability`.
+Hint: The conditional distribution is actually not shown in {numref}`fig-example-MarkovProcessExample_corner_fig` but is easy to obtain using the simple initial distribution and Eq. {eq}`eq:Statistics:conditional-probability`.
 ```
 
 The remnant memory in the process from {prf:ref}`example:simple-markov-process` 
@@ -322,15 +318,15 @@ it can be shown that the stationary Markov chain will reach its unique limiting 
 ````{prf:example} Stationary distribution of "A simple Markov process"
 :label: example:stationary-simple-markov-process
 
-Let us consider again the Markov process from {prf:ref}`example:simple-markov-process`. We could see in {numref}`fig:X2givenX0` that there was some remnant memory of $x_0$ after two steps. However, according to the discussion above, this memory should eventually disappear and we will be left with the stationary (or *equilibrium*) distribution.  This is clearly seen in {numref}`fig-XmgivenX0`.
+Let us consider again the Markov process from {prf:ref}`example:simple-markov-process`. We could see in {numref}`fig:X2givenX0` that there was some remnant memory of $x_0$ after two steps. However, according to the discussion above, this memory should eventually disappear and we will be left with the stationary (or *equilibrium*) distribution.  This is clearly seen in {numref}`fig-example-XmgivenX0`.
+
+````
 
 ```{glue:figure} XmgivenX0_fig
-:name: "fig-XmgivenX0"
+:name: "fig-example-XmgivenX0"
 
 The appearance of a limiting distribution already after $\approx$ 8--12 iterations.
 ```
-
-````
 
 ```{code-cell} python3
 :tags: [hide-cell]
@@ -367,10 +363,10 @@ The chain $Y$ is called the *time-reversal* of $X$, and we say that $X$ is *reve
 Considering a reversible chain with transition density $T$ and stationary distribution $\boldsymbol{\pi}$, the property of reversibility can be formulated as a **detailed balance**
 
 $$
-\pi_k T(k,j) = \pi_j T(j,k),
+\pi_i T(i,j) = \pi_j T(j,i),
 $$ (eq:MarkovChains:detailed-balance)
 
-for all $j,k$ in $S$. 
+for all $j,i$ in $S$. 
 
 ```{exercise} Reversibility
 :label: exercise:MarkovChains:reversibility
@@ -393,20 +389,21 @@ def update(self, random_state, history):
         return propose
 ```
 
-This family of transition densities will be discussed in more detail in the next chapter. For now, we just simulate the above chain and study a set of chains in {numref}`fig-ReversibleMarkovProcessExample-runs` and a subset of conditional probabilities in {numref}`fig-ReversibleMarkovProcessExample-cprob` (produced with the script below). Some relevant questions are listed in {numref}`exercise:MarkovChains:reversible-chain`.
+This family of transition densities will be discussed in more detail in the next chapter. For now, we just simulate the above chain and study a set of chains in {numref}`fig-example-ReversibleMarkovProcessExample-runs` and a subset of conditional probabilities in {numref}`fig-example-ReversibleMarkovProcessExample-cprob` (produced with the script below). Some relevant questions are listed in {numref}`exercise:MarkovChains:reversible-chain`.
+
+````
 
 ```{glue:figure} ReversibleMarkovProcessExample_runs_fig
-:name: "fig-ReversibleMarkovProcessExample-runs"
+:name: "fig-example-ReversibleMarkovProcessExample-runs"
 
 Four chains produced with the reversible Markov chain.
 ```
 
 ```{glue:figure} ReversibleMarkovProcessExample_cprob_fig
-:name: "fig-ReversibleMarkovProcessExample-cprob"
+:name: "fig-example-ReversibleMarkovProcessExample-cprob"
 
 Conditional probabilities for the reversible Markov chain. See the caption of {numref}`fig:X2givenX0` for explanations how to interpret these plots.
 ```
-````
 
 ```{code-cell} python3
 :tags: [hide-cell]
@@ -436,11 +433,79 @@ glue("ReversibleMarkovProcessExample_cprob_fig", fig_cprob_reversible, display=F
 ```{exercise} A reversible Markov chain
 :label: exercise:MarkovChains:reversible-chain
 
-Consider {numref}`fig-ReversibleMarkovProcessExample-cprob`. 
+Consider {numref}`fig-example-ReversibleMarkovProcessExample-cprob`. 
 - Where is the transition density reflected in this plot?
 - Is this a reversible Markov chain?
 - Can you guess what is the equilibrium distribution?
 ```
+
+
+## Metropolis design
+
+A Markov chain that reaches an equilibrium with a stationary distribution $\pi$ will have all subsequent outcomes distributed according to $\pi$. Here we consider discrete chains with a discrete sample space.
+
+`````{admonition} Sampling a distribution
+:class: tip
+Consider a sequence of outcomes $(i_0, i_1, i_2, \ldots)$ from a stationary Markov chain. 
+1. The first outcome, $i_0$, is in practice a sample from the initial probability distribution $\pi^{(0)}$. Note that $\pi^{(0)}_i = \prob_{X_0}(i)$.
+2. The second outcome, $i_1$, is a sample from $\pi^{(1)} = \pi^{(0)} T$. In practice, since we have the first outcome $i_0$, we obtain this second outcome as a sample from the conditional distribution for $X_1$ given $X_0$, i.e., a distribution with elements $\prob_{X_1 \vert X_0}(i \vert i_0) = T(i_0, i)$.
+3. Continuing the process of drawing samples from conditional distributions we find that the $n$:th outcome $i_n$ is a sample from $\pi^{(n)} \pi^{(0)} T^n$, but in practice we obtain it as a draw from $\prob_{X_n \vert X_{n-1}}(i \vert i_{n-1}) = T(i_{n-1}, i)$.
+
+Dismissing the first $n$ outcomes, for which we have not yet reached equilibrium, we have the sequence $(i_{n+1}, i_{n+2}, \ldots)$. These are, respectively, samples from $\pi^{(n+1)}, \pi^{(n+2)}, \ldots$. Assuming that the Markov chain has reached equilibrium, then all of these distributions are in fact the same. Therefore, our sequence of outcomes after equilibration are samples from the *same* distribution $\pi$.
+`````
+
+Now we would like to *design* a stationary Markov chain, via its transition matrix $T$, such that it has a desired probability distribution $\pi$ as its limiting distribution. Let us first recapitulate some important facts concerning Markov chains. 
+
+1. A stationary Markov chain is guaranteed to have a limiting distribution when the transition matrix $T$ fulfills certain conditions (irreducibility, etc).
+2. A limiting distribution $\pi$ is also a stationary distribution: $\pi = \pi T$.
+3. A distribution $\pi$ that fulfills detailed balance, $\pi_i T(i,j) = \pi_j T(j,i)$, is guaranteed to be a stationary distribution.
+
+We utilize these facts in the so called Metropolis design of a Markov chain.
+
+````{prf:remark} The Metropolis design for obtaining a discrete limiting distribution
+:label: remark:MCMC:Metropolis-discrete
+
+We want to design a stationary Markov chain that has a desired distribution $\pi$ as its limiting distribution. To achieve this, we construct the transition matrix in a product form. Its non-diagonal elements are
+
+\begin{equation}
+T(i,j) = A(i,j) S(i,j), \quad \text{for } i \neq j,
+\end{equation}
+
+where $S$ is a (discrete) step proposal matrix and $A$ contains acceptance probabilities. Formally, the elements of these matrices should be interpreted as probabilities
+
+\begin{align}
+S(i,j) &= \cprob{\text{proposing next position } j}{\text{current position is } i}, \\
+A(i,j) &= \cprob{\text{accepting new position } j}{\text{current position is } i},
+\end{align}
+
+where we think of outcomes of subsequent random variables as positions in the sample space. Note how the probability of a transition from $i$ to $j$, given by $T(i,j)$, is then the product of these two independent (proposal and acceptance) probabilities.
+
+Constraining $T$ to fulfill detailed balance {eq}`eq:MarkovChains:detailed-balance` we can guarantee that $\pi$ is a stationary distribution. That is, we require
+
+\begin{equation}
+\pi_i S(i,j) A(i,j) = \pi_j S(j,i) A(j,i).
+\end{equation}
+
+This condition is fulfilled for any stochastic matrix $S$ (impying non-negative entries and row sums equal to one) if one sets the acceptance probability
+
+\begin{equation}
+A(i,j) = \min\left(1, \frac{\pi_j}{\pi_i}\frac{S(j,i)}{S(i,j)} \right),
+\end{equation}
+
+where the second argument to the min-function is known as the *Metropolis ratio*.
+
+Finally, the diagonal entries of the transition matrix are
+
+\begin{equation}
+T(i,i) = S(i,i) + \sum_{j \neq i} S(i,j) \left( 1 - A(i,j)\right),
+\end{equation}
+
+which can be understood by the fact that transitions to the same position can be triggered by a proposed move (the first term; note that $A(i,i)=1$), or by a non-accepted, proposed move to any other position (the sum in the second term). 
+
+Different choices of $S$ can be considered. As long as the chain is irreducible, positively recurrent, and aperiodic then it is guaranteed that $\pi$ is a limiting distribution.
+
+See {numref}`exercise:MCMC:discrete-metropolis` for an explicit example.
+````
 
 
 ## Exercises
@@ -618,7 +683,7 @@ The transition density matrix $T$ has:
 :label: solution:MarkovChains:memory
 :class: dropdown
 
-The marginal distribution $\p{x_2}$ is shown in the third panel on the diagonal of {numref}`fig:MarkovProcessExample_corner_fig`. The fact that the initial distribution for $X_0$ is uniform implies that $\pdf{x_2}{x_0} \propto \p{x_2,x_0}$. The joint distribution on the right-hand side is shown in the third panel from the top in the fist column. The conditional distribution then corresponds to slices at different values of $x_0$. It is obvious that these slices do not look like $\p{x_2}$ for all values of $x_0$. (See also {numref}`fig:X2givenX0`.)
+The marginal distribution $\p{x_2}$ is shown in the third panel on the diagonal of {numref}`fig-example-MarkovProcessExample_corner_fig`. The fact that the initial distribution for $X_0$ is uniform implies that $\pdf{x_2}{x_0} \propto \p{x_2,x_0}$. The joint distribution on the right-hand side is shown in the third panel from the top in the fist column. The conditional distribution then corresponds to slices at different values of $x_0$. It is obvious that these slices do not look like $\p{x_2}$ for all values of $x_0$. (See also {numref}`fig:X2givenX0`.)
 ```
 
 ````{solution} exercise:MarkovChains:conditional-distributions

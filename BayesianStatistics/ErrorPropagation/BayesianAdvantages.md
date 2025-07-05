@@ -43,8 +43,6 @@ The Bayesian approach offers a number of distinct advantages in scientific appli
 :class: tip
 Occam’s razor is a principle attributed to the medieval philosopher William of Occam (or Ockham). The principle states that one should not make more assumptions than the minimum needed. It underlies all scientific modeling and theory building. It cautions us to choose from a set of otherwise equivalent models of a given phenomenon the simplest one. In any given model, Occam’s razor helps us to "shave off" those variables that are not really needed to explain the phenomenon. It was previously thought to be only a qualitative principle.
 
-<!-- ![<p><em>Did the Leprechaun drink your wine, or is there a simpler explanation?</em></p>](./figs/Leprechaun_or_Clurichaun.png) -->
-
 ```{figure} ./figs/Leprechaun_or_Clurichaun.png
 :height: 250px
 :name: fig-Leprechaun
@@ -56,26 +54,21 @@ Did the Leprechaun drink your wine, or is there a simpler explanation?
 ## Inference with parametric models
 
 Inductive inference with parametric models is a very important tool in the natural sciences.
-* Consider $N$ different models $M_i$ ($i = 1, \ldots, N$), each with a parameter vector $\boldsymbol{\theta}_i$. The number of parameters (length of $\boldsymbol{\theta}_i$) might be different for different models. Each of them implies a sampling distribution for possible data
+* Consider $N$ different models $M_i$ ($i = 1, \ldots, N$), each with a parameter vector $\pars_i$. The number of parameters (length of $\pars_i$) might be different for different models. Each of them implies a sampling distribution for possible data
 
 \begin{equation}
-
-p(D|\boldsymbol{\theta}_i, M_i)
-
+p(\data|{\pars}_i, M_i)
 \end{equation}
 
-* The likelihood function is the pdf of the actual, observed data ($D_\mathrm{obs}$) given a set of parameters $\boldsymbol{\theta}_i$:
+* The likelihood function is the pdf of the actual, observed data ($\data_\mathrm{obs}$) given a set of parameters $\boldsymbol{\theta}_i$:
 
 \begin{equation}
-
-\mathcal{L}_i (\boldsymbol{\theta}_i) \equiv p(D_\mathrm{obs}|\boldsymbol{\theta}_i, M_i)
-
+{\mathcal{L}}_i (\pars_i) \equiv p(\data_\mathrm{obs}|\pars_i, M_i)
 \end{equation}
 * We may be uncertain about $M_i$ (model uncertainty),
-* or uncertain about $\boldsymbol{\theta}_i$ (parameter uncertainty).
+* or uncertain about $\pars_i$ (parameter uncertainty).
 
 
-<!-- !split -->
 ```{Admonition} Parameter Estimation:
   :class: tip
   Premise: We have chosen a model (say $M_1$)
@@ -96,7 +89,7 @@ p(D|\boldsymbol{\theta}_i, M_i)
   ```
 ```{Admonition} Hybrid Uncertainty:
   :class: tip
-  Premise: Models share some common parameters: $\boldsymbol{\theta}_i = \{ \boldsymbol{\varphi}, \boldsymbol{\eta}_i\}$
+  Premise: Models share some common parameters: $\pars_i = \{ \boldsymbol{\varphi}, {\boldsymbol{\eta}}_i\}$
   
   $\Rightarrow$ What can we say about $\boldsymbol{\varphi}$? (Systematic error is an example)
 ```
@@ -366,7 +359,7 @@ Find $\pdf{z}{I}$ when $Z = (X-\mu)/\sigma$ and $\pdf{x}{I} = \frac{1}{\sqrt{2\p
 ```{exercise} The square root of a number
 :label: exercise:BayesianAdvantages:square-root-of-a-number
 
-Find an expression for $\pdf{z}{I}$ when $Z = \sqrt{X}$ and $\pdf{x}{I} = \frac{1}{x_\max - x_\min}$ for $x_\min \leq x \leq x_\max$ and 0 elsewhere. Verify that $\pdf{z}{I}$ is properly normalized.
+Find an expression for $\pdf{z}{I}$ when $Z = \sqrt{X}$ and $\pdf{x}{I} = \frac{1}{x_{\max} - x_{\min}}$ for $x_{\min} \leq x \leq x_{\max}$ and 0 elsewhere. Verify that $\pdf{z}{I}$ is properly normalized.
 ```
 
 
@@ -385,17 +378,13 @@ Suppose that we have summarized the PDFs $\pdf{x}{I}$ and $\pdf{y}{I}$ as two Ga
 Suppose now that we are interested in $Z=X-Y$. Intuitively, we might guess that the best estimate $z_0 = x_0 - y_0$, but the standard deviation $\sigma_z$ requires some more thought. Differentiate the relation 
 
 \begin{equation}
-
 \delta Z = \delta X - \delta Y.
-
 \end{equation}
 
 For error bars, we are interested in this relation around the optimum, i.e., $\delta X = X - x_0$ and so on. Square both sides and integrate to get the expectation value
 
 \begin{equation}
-
 \expect{\delta Z^2} = \expect{\delta X^2 + \delta Y^2 - 2 \delta X \delta Y}  = \expect{\delta X^2} + \expect {\delta Y^2} - 2 \expect{\delta X \delta Y},
-
 \end{equation}
 
 where we have employed the linear property for an integral over a sum of terms.
@@ -409,9 +398,7 @@ $$ (eq:stddev)
 and we find that
 
 \begin{equation}
-
 \sigma_z = \sqrt{ \expect{\delta Z^2} } = \sqrt{ \sigma_x^2 + \sigma_y^2 }.
-
 \end{equation}
 
 ````{prf:example} Inferring galactic distances---revisited
@@ -454,7 +441,7 @@ Consider $Z=XY$ and derive a PDF for $Z$ assuming Gaussian errors in $X$ and $Y$
 Despite its virtues, let us end our discussion of error-propagation with a salutary warning against the blind use of this nifty short cut.
 
 
-````{prf:example} Taking the square root of a number
+```{prf:example} Taking the square root of a number
 :label: example:BayesianAdvantage:taking-square-root
 
 * Assume that the amplitude of a Bragg peak is measured with an uncertainty $A = A_0 \pm \sigma_A$ from a least-squares fit to experimental data.
@@ -464,18 +451,15 @@ Despite its virtues, let us end our discussion of error-propagation with a salut
 Obviously, we have that $f_0 = \sqrt{A_0}$. Differentiate the relation, square and take the expectation value
 
 \begin{equation}
-
 \expect{\delta A^2} = 4 f_0^2 \expect{\delta f^2} \quad 
 \Leftrightarrow \quad 
 \sigma_f = \frac{\sigma_A}{2 \sqrt{A_0}},
-
 \end{equation}
 
 where we have used the Gaussian approximation for the PDFs.
 
 But what happens if the best fit gives $A_0 < 0$, which would not be impossible if we have weak and strongly overlapping peaks. The above equation obviously does not work since $f_0$ would be a complex number.
 
-<!-- !split -->
 We have made two mistakes:
 1. Likelihood is not posterior!
 2. The Gaussian approximation around the peak does not always work.
@@ -483,12 +467,10 @@ We have made two mistakes:
 Consider first the best fit of the signal peak. It implies that the likelihood can be approximated by
 
 \begin{equation}
-
 \pdf{\data}{A,I} \propto \exp \left[ -\frac{(A-A_0)^2}{2\sigma_A^2} \right].
-
 \end{equation}
 
-However, the posterior for $A$ is $\pdf{A}{\data,I} \propto \pdf{\data}{A,I} \pdf{A}{I}$ and we should use the fact that we know that $A \ge 0$.
+However, the posterior for $A$ is $\pdf{A}{{\data},I} \propto \pdf{\data}{A,I} \pdf{A}{I}$ and we should use the fact that we know that $A \ge 0$.
 
 We will incorporate this information through a simple step-function prior
 
@@ -506,38 +488,30 @@ This implies that the posterior will be a truncated Gaussian, and its maximum wi
 This also implies that we cannot use the Gaussian approximation. Instead we will do the proper calculation using the transformation {eq}`eq:BayesianAdvantage:transformation`
 
 \begin{equation}
-p(f|\data,I) = \pdf{A}{\data,I} \left| \frac{dA}{df} \right| = 2 f \pdf{A}{\data,I}
+p(f|{\data},I) = \pdf{A}{{\data},I} \left| \frac{dA}{df} \right| = 2 f \pdf{A}{{\data},I}
 \end{equation}
 
 In the end we find the proper Bayesian error propagation given by the PDF
 
 \begin{equation}
-
-p(f|\data,I) \propto \left\{
+p(f|{\data},I) \propto \left\{
 \begin{array}{ll}
 f \exp \left[ -\frac{(A-A_0)^2}{2\sigma_A^2} \right], & 0 \le f \le \sqrt{A_\mathrm{max}}, \\
 0, & \mathrm{otherwise}.
 \end{array}
 \right.
-
 \end{equation}
 
-Let us visualize the difference between the Bayesian and the naive error propagation for a few scenarios. The code to generate these plots is in the hidden cell below.
+{numref}`fig-example-BayesianAdvantage-taking-square-root` visualize the difference between the Bayesian and the naive error propagation for a few scenarios. The code to generate these plots is in the hidden cell below.
 
-```{glue:figure} Af_fig_0
 ```
 
-```{glue:figure} Af_fig_1
-```
-
-```{glue:figure} Af_fig_2
-:name: "fig-Sivia-9_1"
+```{glue:figure} Af_fig
+:name: fig-example-BayesianAdvantage-taking-square-root
 
 The left-hand panels show the posterior PDF for the amplitude of a Bragg peak in three different scenarios. The right-hand plots are the corresponding PDFs for the modulus of the structure factor $f=\sqrt{A}$. The solid lines correspond to a full Bayesian error propagation, while the dashed lines are obtained with the short-cut error propagation.
 ```
 
-
-````
 
 ```{code-cell} python3
 :tags: [hide-cell]
@@ -560,21 +534,23 @@ def f_posterior(f,A0,sigA):
     pf = f*np.exp(-(f**2-A0)**2/(2*sigA**2))
     return pf/np.max(pf)
     
+fig_Af,axs=plt.subplots(3,2,figsize=(5,7))
 for iA, (A0,sigA) in enumerate([(9,1),(1,9),(-20,9)]):
     maxA = max(2*A0,3*sigA)
     A_arr = np.linspace(0.01,maxA,100)
     f_arr = np.sqrt(A_arr)
-    fig_Af,ax=plt.subplots(1,2,figsize=(9,4))
-    ax[0].plot(A_arr,A_posterior(A_arr,A0,sigA))
-    ax[1].plot(f_arr,f_posterior(f_arr,A0,sigA),label='Bayesian')
+    axs[iA,0].plot(A_arr,A_posterior(A_arr,A0,sigA))
+    axs[iA,1].plot(f_arr,f_posterior(f_arr,A0,sigA),label='Bayesian')
     if A0>0:
-        ax[1].plot(f_arr,f_likelihood(f_arr,A0,sigA),'--',label='Naive')
-    ax[0].set(xlabel='A',ylabel=r'$p(A | \mathcal{D},I)$')
-    plt.text(0.53,0.8,f'$A={A0}$, $\sigma_A={sigA}$', \
-    	transform=ax[0].transAxes,fontsize=12)
-    ax[1].set(xlabel='f',ylabel=r'$p(f | \mathcal{D},I)$')
-    ax[1].legend(loc='best')
-    glue(f"Af_fig_{iA}", fig_Af, display=False)
+        axs[iA,1].plot(f_arr,f_likelihood(f_arr,A0,sigA),'--',label='Naive')
+    axs[iA,0].set(xlabel='A',ylabel=r'$p(A | \mathcal{D},I)$')
+    axs[iA,0].text(0.95,0.8,f'$A_0={A0}$, $\sigma_A={sigA}$', \
+    	horizontalalignment='right',\
+    	transform=axs[iA,0].transAxes,fontsize=10)
+    axs[iA,1].set(xlabel='f',ylabel=r'$p(f | \mathcal{D},I)$')
+axs[0,1].legend(loc='best')
+fig_Af.tight_layout()
+glue(f"Af_fig", fig_Af, display=False)
 ```
 
 ## Solutions
@@ -709,7 +685,7 @@ which corresponds to a Gaussian distribution with mean zero and variance one, so
 With $z = f(x) = \sqrt{x}$ we have $x = f^{-1}(z) = z^2$ such that $|dx/dz| = 2|z|$. We note that $z$ is positive such that $|z| = z$ and we therefore have
 
 $$
-\pdf{z}{I} = 2 z \pdf{x}{I} = 2 z \frac{1}{x_\max - x_\min} \quad \text{for } \sqrt{x_\min} \leq z \leq \sqrt{x_\max},
+\pdf{z}{I} = 2 z \pdf{x}{I} = 2 z \frac{1}{x_{\max} - x_{\min}} \quad \text{for } \sqrt{x_{\min}} \leq z \leq \sqrt{x_{\max}},
 $$
 
 and 0 elsewhere. 
@@ -717,7 +693,7 @@ and 0 elsewhere.
 We check the normalization by performing the integral
 
 $$
-\int_0^\infty \pdf{z}{I} dz = \int_{\sqrt{x_\min}}^{\sqrt{x_\max}} \frac{2z}{x_\max - x_\min} dz = \frac{1}{x_\max - x_\min} \left[ z^2 \right]_{\sqrt{x_\min}}^{\sqrt{x_\max}} = 1.
+\int_0^\infty \pdf{z}{I} dz = \int_{\sqrt{x_{\min}}}^{\sqrt{x_{\max}}} \frac{2z}{x_{\max} - x_{\min}} dz = \frac{1}{x_{\max} - x_{\min}} \left[ z^2 \right]_{\sqrt{x_{\min}}}^{\sqrt{x_{\max}}} = 1.
 $$
 ```
 
