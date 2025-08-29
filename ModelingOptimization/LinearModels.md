@@ -201,6 +201,16 @@ We note also that since our design matrix is defined as $\dmat\in
 {\mathbb{R}}^{N_d\times N_p}$, the product $\dmat^T\dmat \in
 {\mathbb{R}}^{N_p\times N_p}$. The product $\left(\dmat^T\dmat\right)^{-1}\dmat^T$ is called the pseudo-inverse of the design matrix $\dmat$. The pseudo-inverse is a generalization of the usual matrix inverse. The former can be defined for also for non-square matrices that are not necessarily full rank. In the case of full-rank and square matrices the pseudo-inverse is equal to the usual inverse.
 
+```{admonition} Mean-squared error
+Here we have been minimizing the sum of squared residuals, see Eq. {eq}`eq:LinearRegression:cost-function`. An optimization metric that is less dependent on the number of data is the **mean-squared error**. The cost function is then
+$$
+C_\mathrm{MSE}(\pars) \equiv \frac{1}{N_d} \left\{\left(\data-\dmat \pars\right)^T\left(\data-\dmat \pars\right)\right\}.
+$$
+If, and how, would this choice of cost function change:
+- The optimum $\pars^*$?
+- The expression for the gradient vector $\boldsymbol{\nabla}_{\pars} C_\mathrm{MSE} (\pars)$?
+```
+
 The regression residuals $\boldsymbol{\epsilon}^{*} =  \data - \dmat \pars^{*}$ can be used to obtain an estimator $s^2$ of the variance of the residuals
 
 $$
