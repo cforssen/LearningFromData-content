@@ -24,6 +24,7 @@ kernelspec:
 
 {{ sub_OverviewModeling_notation }}
 
+(sec:OverviewModeling:models-in-science)=
 ## Models in science
 
 In general, modeling deals with the description of **dependent** variable(s) $\outputs$ as a function of some **independent** variable(s) $\inputs$. The first variable is also often called the **response**, or the **outcome** variable while the second one can be called the **predictor** variable, or the **explanatory** variable. Both dependent and independent variables can be of various types: real-valued, integers or categorical, defined on infinite or discrete domains, etc. Note also that each of these might be a vector of variables, meaning that there could be more than one dependent variable and more than one independent variable. We therefore denoted these variables as vectors using a bold font. The general act of finding a relationship between dependent and independent variables is known as *regression analysis* and usually involves a set of collected data.
